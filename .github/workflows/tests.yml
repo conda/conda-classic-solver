@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PYTEST_RERUN_FAILURES: 3
+  PYTEST_RERUN_FAILURES: 0
   # See https://github.com/conda/conda/pull/13694
   # we can't break classic from here; no need to test it
   # those tests will still be available for local debugging if necessary
@@ -107,6 +107,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
+          # repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
           repository: jaimergp/conda  # TEMPORARY
           ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
@@ -170,7 +171,7 @@ jobs:
         if: ${{ matrix.test-type != 'conda-classic-solver' }}  # CONDA-CLASSIC-SOLVER CHANGE
         run: python -m pytest
           --cov=conda
-          --durations-path=tools\durations\${{ runner.os }}.json
+          --durations-path=durations\${{ runner.os }}.json
           --group=${{ matrix.test-group }}
           --splits=${{ env.PYTEST_SPLITS }}
           --reruns=${{ env.PYTEST_RERUN_FAILURES }}
@@ -206,7 +207,7 @@ jobs:
           # CONDA-CLASSIC-SOLVER CHANGE: need to prepend conda/ to the paths
           path: |
             conda\.coverage
-            conda\tools\durations\${{ runner.os }}.json
+            conda\durations\${{ runner.os }}.json
             conda\test-report.xml
           retention-days: 1  # temporary, combined in aggregate below
 
@@ -256,6 +257,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
+          # repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
           repository: jaimergp/conda  # TEMPORARY
           ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
@@ -286,7 +288,8 @@ jobs:
 
       - name: Conda Install
         working-directory: conda
-        run: conda install
+        run: >
+          conda install
           --yes
           --file tests/requirements.txt
           --file tests/requirements-${{ runner.os }}.txt
@@ -316,7 +319,7 @@ jobs:
         if: ${{ matrix.test-type != 'conda-classic-solver' }}  # CONDA-CLASSIC-SOLVER CHANGE
         run: python -m pytest
           --cov=conda
-          --durations-path=tools/durations/${{ runner.os }}.json
+          --durations-path=durations/${{ runner.os }}.json
           --group=${{ matrix.test-group }}
           --splits=${{ env.PYTEST_SPLITS }}
           --reruns=${{ env.PYTEST_RERUN_FAILURES }}
@@ -346,7 +349,7 @@ jobs:
           name: test-results-${{ env.HASH }}
           path: |
             conda/.coverage
-            conda/tools/durations/${{ runner.os }}.json
+            conda/durations/${{ runner.os }}.json
             conda/test-report.xml
           retention-days: 1  # temporary, combined in aggregate below
 
@@ -415,7 +418,7 @@ jobs:
         run: conda list --show-channel-urls
 
       - name: Run Benchmarks
-        uses: CodSpeedHQ/action@a58b84c0b61569a9cbb7cfb378cc849d65cf1ce5 # v2.4.3
+        uses: CodSpeedHQ/action@ab07afd34cbbb7a1306e8d14b7cc44e029eee37a # v3.0.0
         with:
           token: ${{ secrets.CODSPEED_TOKEN }}
           run: $CONDA/envs/test/bin/pytest --codspeed
@@ -534,6 +537,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
+          # repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
           repository: jaimergp/conda  # TEMPORARY
           ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
@@ -569,7 +573,8 @@ jobs:
       - name: Conda Install
         working-directory: conda # CONDA-CLASSIC-SOLVER CHANGE
         # CONDA-CLASSIC-SOLVER CHANGE: add conda-classic-solver requirements.txt
-        run: conda install
+        run: >
+          conda install
           --yes
           --file tests/requirements.txt
           --file tests/requirements-ci.txt
@@ -598,7 +603,7 @@ jobs:
         if: ${{ matrix.test-type != 'conda-classic-solver' }}  # CONDA-CLASSIC-SOLVER CHANGE
         run: python -m pytest
           --cov=conda
-          --durations-path=tools/durations/${{ runner.os }}.json
+          --durations-path=durations/${{ runner.os }}.json
           --group=${{ matrix.test-group }}
           --splits=${{ env.PYTEST_SPLITS }}
           --reruns=${{ env.PYTEST_RERUN_FAILURES }}
@@ -629,7 +634,7 @@ jobs:
           # CONDA-CLASSIC-SOLVER CHANGE: need to prepend conda/ to the paths
           path: |
             conda/.coverage
-            conda/tools/durations/${{ runner.os }}.json
+            conda/durations/${{ runner.os }}.json
             conda/test-report.xml
           retention-days: 1  # temporary, combined in aggregate below
 
