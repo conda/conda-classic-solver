@@ -153,7 +153,7 @@ jobs:
 
       # CONDA-CLASSIC-SOLVER CHANGE
       - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
+        run: python -m pip install -e conda-classic-solver/ -e conda/ -vv --no-deps
       #/ CONDA-CLASSIC-SOLVER CHANGE
 
       - name: Conda Info
@@ -165,7 +165,7 @@ jobs:
       - name: Conda List
         run: conda list --show-channel-urls
 
-      - name: Run Upstream Tests
+      - name: Run Tests
         working-directory: conda  # CONDA-CLASSIC-SOLVER CHANGE
         if: ${{ matrix.test-type != 'conda-classic-solver' }}  # CONDA-CLASSIC-SOLVER CHANGE
         run: python -m pytest
@@ -299,7 +299,7 @@ jobs:
 
       # CONDA-CLASSIC-SOLVER CHANGE
       - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
+        run: python -m pip install -e conda-classic-solver/ -e conda/ -vv --no-deps
       #/ CONDA-CLASSIC-SOLVER CHANGE
 
       - name: Conda Info
@@ -581,7 +581,7 @@ jobs:
 
       # CONDA-CLASSIC-SOLVER CHANGE
       - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
+        run: python -m pip install -e conda-classic-solver/ -e conda/ -vv --no-deps
       #/ CONDA-CLASSIC-SOLVER CHANGE
 
       - name: Conda Info
