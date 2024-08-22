@@ -107,7 +107,8 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-          repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
+          repository: jaimergp/conda  # TEMPORARY
+          ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
 
       # CONDA-CLASSIC-SOLVER CHANGE
@@ -255,7 +256,8 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-          repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
+          repository: jaimergp/conda  # TEMPORARY
+          ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
 
       # CONDA-CLASSIC-SOLVER CHANGE
@@ -532,7 +534,8 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-          repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
+          repository: jaimergp/conda  # TEMPORARY
+          ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
 
       # CONDA-CLASSIC-SOLVER CHANGE
