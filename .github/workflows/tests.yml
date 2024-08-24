@@ -107,8 +107,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-          # repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
-          repository: jaimergp/conda  # TEMPORARY
+          repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
           ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
 
@@ -154,7 +153,7 @@ jobs:
 
       # CONDA-CLASSIC-SOLVER CHANGE
       - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -e conda/ -vv --no-deps
+        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
       #/ CONDA-CLASSIC-SOLVER CHANGE
 
       - name: Conda Info
@@ -257,8 +256,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-          # repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
-          repository: jaimergp/conda  # TEMPORARY
+          repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
           ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
 
@@ -302,7 +300,7 @@ jobs:
 
       # CONDA-CLASSIC-SOLVER CHANGE
       - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -e conda/ -vv --no-deps
+        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
       #/ CONDA-CLASSIC-SOLVER CHANGE
 
       - name: Conda Info
@@ -537,8 +535,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-          # repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
-          repository: jaimergp/conda  # TEMPORARY
+          repository: conda/conda  # CONDA-CLASSIC-SOLVER CHANGE
           ref: remove-classic  # TEMPORARY
           path: conda  # CONDA-CLASSIC-SOLVER CHANGE
 
@@ -586,7 +583,7 @@ jobs:
 
       # CONDA-CLASSIC-SOLVER CHANGE
       - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -e conda/ -vv --no-deps
+        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
       #/ CONDA-CLASSIC-SOLVER CHANGE
 
       - name: Conda Info
