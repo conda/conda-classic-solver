@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=71.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conda-classic-solver"
+description = "The `classic` solver used in `conda`"
+requires-python = ">=3.8"
+classifiers = [
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy"
+]
+dynamic = ["version"]
+dependencies = [
+  "conda",
+  "pycosat >=0.6.3",
+]
+
+[project.entry-points.conda]
+conda-classic-solver = "conda_classic_solver.plugin"
+
+[tool.setuptools]
+packages = ["conda_classic_solver"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+  "--color=yes",
+  "--strict-markers",
+  "--xdoctest-modules",
+  "--xdoctest-style=google",
+]
+
+markers = [
+  "integration: integration tests that usually require an internet connect",
+  "slow: slow running tests",
+]
+
+[tool.ruff]
+exclude = ["tests/data/"]
+target-version = "py38"
+line-length = 99
+
+[tool.ruff.lint]
+# E, W = pycodestyle errors and warnings
+# F = pyflakes
+# I = isort
+# D = pydocstyle
+# UP = pyupgrade
+# ISC = flake8-implicit-str-concat
+# TCH = flake8-type-checking
+# T10 = flake8-debugger
+# FA = flake8-future-annotations
+# see also https://docs.astral.sh/ruff/rules/
+select = ["E", "W", "F", "I", "D1", "UP", "ISC", "TCH", "T10", "FA"]
+# E402 module level import not at top of file
+# E501 line too long
+# E722 do not use bare 'except'
+# E731 do not assign a lambda expression, use a def
+# D101 Missing docstring in public class
+# D102 Missing docstring in public method
+# D103 Missing docstring in public function
+# D104 Missing docstring in public package
+# D105 Missing docstring in magic method
+# D107 Missing docstring in `__init__`
+ignore = ["E402", "E501", "E722", "E731", "D101", "D102", "D103", "D104", "D105", "D107"]
+extend-per-file-ignores = {"docs/*" = ["D1"], "tests/*" = ["D1"]}
+pydocstyle = {convention = "pep257"}
+flake8-type-checking = {exempt-modules = [], strict = true}
