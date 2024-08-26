@@ -5,4 +5,4 @@
 The conda_classic_solver package
 """
 
-from .solver import ClassicSolver  # noqa
+from .solve import ClassicSolver  # noqa

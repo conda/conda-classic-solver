@@ -9,7 +9,7 @@ from typing import Iterable
 
 from conda.plugins import CondaSolver, hookimpl
 
-from .solver import ClassicSolver
+from .solve import ClassicSolver
 
 
 @hookimpl

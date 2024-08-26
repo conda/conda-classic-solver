@@ -13,15 +13,32 @@ from collections import defaultdict, deque
 from functools import lru_cache
 from logging import DEBUG, getLogger
 
+from conda.auxlib.decorators import memoizemethod
+from conda.base.constants import MAX_CHANNEL_PRIORITY, ChannelPriority, SatSolverChoice
+from conda.base.context import context
+from conda.common.compat import on_win
+from conda.common.io import dashlist, time_recorder
+from conda.common.iterators import groupby_to_dict as groupby
+from conda.common.toposort import toposort
+from conda.exceptions import (
+    CondaDependencyError,
+    InvalidSpec,
+    ResolvePackageNotFound,
+    UnsatisfiableError,
+)
+from conda.models.channel import Channel, MultiChannel
+from conda.models.enums import NoarchType, PackageType
+from conda.models.match_spec import MatchSpec
+from conda.models.records import PackageRecord
+from conda.models.version import VersionOrder
 from tqdm import tqdm
 
-from .auxlib.decorators import memoizemethod
-from .base.constants import MAX_CHANNEL_PRIORITY, ChannelPriority, SatSolverChoice
-from .base.context import context
-from .common.compat import on_win
-from .common.io import dashlist, time_recorder
-from .common.iterators import groupby_to_dict as groupby
-from .common.logic import (
+try:
+    from frozendict import frozendict
+except ImportError:
+    from conda._vendor.frozendict import FrozenOrderedDict as frozendict
+
+from .logic import (
     TRUE,
     Clauses,
     PycoSatSolver,
@@ -29,23 +46,6 @@ from .common.logic import (
     PySatSolver,
     minimal_unsatisfiable_subset,
 )
-from .common.toposort import toposort
-from .exceptions import (
-    CondaDependencyError,
-    InvalidSpec,
-    ResolvePackageNotFound,
-    UnsatisfiableError,
-)
-from .models.channel import Channel, MultiChannel
-from .models.enums import NoarchType, PackageType
-from .models.match_spec import MatchSpec
-from .models.records import PackageRecord
-from .models.version import VersionOrder
-
-try:
-    from frozendict import frozendict
-except ImportError:
-    from ._vendor.frozendict import FrozenOrderedDict as frozendict
 
 log = getLogger(__name__)
 stdoutlog = getLogger("conda.stdoutlog")
@@ -179,7 +179,7 @@ class Resolve:
 
     def default_filter(self, features=None, filter=None):
         # TODO: fix this import; this is bad
-        from .core.subdir_data import make_feature_record
+        from conda.core.subdir_data import make_feature_record
 
         if filter is None:
             filter = {}
@@ -665,7 +665,7 @@ class Resolve:
         self, explicit_specs, sort_by_exactness=True, exit_on_conflict=False
     ):
         # TODO: fix this import; this is bad
-        from .core.subdir_data import make_feature_record
+        from conda.core.subdir_data import make_feature_record
 
         strict_channel_priority = context.channel_priority == ChannelPriority.STRICT
 
