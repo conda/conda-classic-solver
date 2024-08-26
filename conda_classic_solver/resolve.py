@@ -1,4 +1,5 @@
 # Copyright (C) 2012 Anaconda, Inc
+# Copyright (C) 2023 conda
 # SPDX-License-Identifier: BSD-3-Clause
 """Low-level SAT solver wrapper/interface for the classic solver.
 
