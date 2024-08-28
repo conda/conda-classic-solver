@@ -46,7 +46,6 @@ markers = [
 [tool.ruff]
 exclude = ["tests/data/"]
 target-version = "py38"
-line-length = 99
 
 [tool.ruff.lint]
 # E, W = pycodestyle errors and warnings
