@@ -1,0 +1,162 @@
+- name: Trent Nelson
+  email: trent@trent.me
+  num_commits: 1
+  first_commit: 2013-09-04 00:41:27
+- name: Travis E. Oliphant
+  email: teoliphant@gmail.com
+  num_commits: 1
+  first_commit: 2013-12-22 05:53:03
+  github: teoliphant
+  alternate_emails:
+  - travis@continuum.io
+- name: Sophia Castellarin
+  email: scastellarin@continuum.io
+  num_commits: 1
+  first_commit: 2016-12-07 18:20:22
+  github: soapy1
+  aliases:
+  - Sophia Castellarin
+  - soapy1
+  - sophia
+  alternate_emails:
+  - scastellarin@anaconda.com
+  - scastellarin95@gmail.com
+- name: Daniel Holth
+  email: dholth@anaconda.com
+  num_commits: 4
+  first_commit: 2022-09-29 17:58:55
+  github: dholth
+- name: Angela Gloyna
+  email: angela.gloyna@gmail.com
+  num_commits: 1
+  first_commit: 2020-07-24 18:34:23
+  github: angloyna
+- name: Ken Odegard
+  email: kodegard@anaconda.com
+  num_commits: 22
+  first_commit: 2021-11-12 22:33:20
+  github: kenodegard
+- name: Gonzalo Peña-Castellanos
+  email: goanpeca@gmail.com
+  num_commits: 2
+  first_commit: 2018-02-14 21:01:00
+  github: goanpeca
+- name: Cheng H. Lee
+  email: clee@anaconda.com
+  num_commits: 6
+  first_commit: 2020-07-30 22:53:34
+  github: chenghlee
+- name: Tarcisio
+  email: tarcisioe@pm.me
+  num_commits: 1
+  first_commit: 2023-08-22 05:16:15
+- name: Bianca Henderson
+  email: bhenderson@anaconda.com
+  num_commits: 1
+  first_commit: 2022-06-24 17:39:12
+  github: beeankha
+- name: Jonathan J. Helmus
+  email: jjhelmus@gmail.com
+  num_commits: 7
+  first_commit: 2018-02-17 05:29:04
+  github: jjhelmus
+- name: pre-commit CI
+  email: 66853113+pre-commit-ci[bot]@users.noreply.github.com
+  github: pre-commit-ci[bot]
+  aliases:
+  - pre-commit-ci[bot]
+  num_commits: 1
+  first_commit: 2022-08-02 02:41:18
+- name: Klaus Zimmermann
+  email: klaus.zimmermann@quansight.com
+  num_commits: 1
+  first_commit: 2024-06-12 14:29:00
+  github: zklaus
+- name: Aaron Meurer
+  email: aaron.meurer@continuum.io
+  num_commits: 73
+  first_commit: 2013-06-18 15:42:10
+  github: asmeurer
+- name: Michael C. Grant
+  email: mgrant@anaconda.com
+  num_commits: 7
+  first_commit: 2016-02-05 17:36:51
+  github: mcg1969
+- name: Kian-Meng Ang
+  email: kianmeng.ang@gmail.com
+  num_commits: 1
+  first_commit: 2022-05-04 10:34:07
+  github: kianmeng
+- name: Jaime Rodríguez-Guerra
+  email: jaime.rogue@gmail.com
+  num_commits: 16
+  first_commit: 2022-02-26 00:45:26
+  github: jaimergp
+  aliases:
+  - jaimergp
+  - Jaime Rodríguez-Guerra
+  - Jaime RGP
+  - Jaime RG
+  alternate_emails:
+  - jaimergp@users.noreply.github.com
+  - jaime.rogue@gmail.com
+- name: Dave Hogue
+  email: thedavehogue@gmail.com
+  num_commits: 1
+  first_commit: 2023-05-04 14:04:58
+  github: THEdavehogue
+- name: Jannis Leidel
+  email: jannis@leidel.info
+  num_commits: 7
+  first_commit: 2021-09-17 20:56:50
+  github: jezdez
+- name: Travis Hathaway
+  email: travis.j.hathaway@gmail.com
+  num_commits: 1
+  first_commit: 2022-08-08 17:35:29
+  github: travishathaway
+- name: Michael Sarahan
+  email: msarahan@continuum.io
+  num_commits: 106
+  first_commit: 2015-11-03 22:07:33
+  github: msarahan
+  aliases:
+  - Mike Sarahan
+  - Michael Sarahan
+  alternate_emails:
+  - msarahan@gmail.com
+  - msarahan@continuum.io
+- name: Travis Swicegood
+  email: travis@domain51.com
+  num_commits: 1
+  first_commit: 2015-04-24 00:33:12
+  github: tswicegood
+  alternate_emails:
+  - development@domain51.com
+- name: Ilan Schnell
+  email: ilan@continuum.io
+  num_commits: 57
+  first_commit: 2013-05-21 01:11:18
+  github: ilanschnell
+  alternate_emails:
+  - ilan@hq-dhcp-20-84.20.10.10.in-addr.arpa
+  - ilanschnell@gmail.com
+- name: Daniel Bast
+  email: 2790401+dbast@users.noreply.github.com
+  num_commits: 2
+  first_commit: 2022-10-05 22:03:28
+  github: dbast
+- name: Kale Franz
+  email: kfranz@continuum.io
+  num_commits: 124
+  first_commit: 2016-02-20 00:43:47
+  github: kalefranz
+  alternate_emails:
+  - kalefranz@users.noreply.github.com
+- name: Mahe Iram Khan
+  email: 65779580+ForgottenProgramme@users.noreply.github.com
+  num_commits: 2
+  first_commit: 2022-10-19 12:57:17
+  github: ForgottenProgramme
+  alternate_emails:
+  - forgotten.programme@gmail.com
