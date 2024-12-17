@@ -595,20 +595,15 @@ class ClassicSolver(Solver):
                 if len(matches_for_spec) != 1:
                     raise CondaError(
                         dals(
-                            """
+                            f"""
                     Conda encountered an error with your environment.  Please report an issue
                     at https://github.com/conda/conda/issues.  In your report, please include
                     the output of 'conda info' and 'conda list' for the active environment, along
                     with the command you invoked that resulted in this error.
-                      pkg_name: %s
-                      spec: %s
-                      matches_for_spec: %s
+                      pkg_name: {pkg_name}
+                      spec: {spec}
+                      matches_for_spec: {dashlist((str(s) for s in matches_for_spec), indent=4)}
                     """
-                        )
-                        % (
-                            pkg_name,
-                            spec,
-                            dashlist((str(s) for s in matches_for_spec), indent=4),
                         )
                     )
                 target_prec = matches_for_spec[0]
