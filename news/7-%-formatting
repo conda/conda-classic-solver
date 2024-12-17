@@ -17,3 +17,4 @@
 ### Other
 
 * Stop using %-style formatting. (#7)
+* Drop Python 3.8 from CI. Note the project is still compatible with 3.8. (#7)
