@@ -750,7 +750,7 @@ class Resolve:
 
             reduced = nnew < nold
             if reduced:
-                log.debug("%s: pruned from %d -> %d" % (name, nold, nnew))
+                log.debug("%s: pruned from %d -> %d", name, nold, nnew)
             if any(ms.optional for ms in _specs):
                 return reduced
             elif nnew == 0:
@@ -1435,7 +1435,7 @@ class Resolve:
         specs = set(specs)
         if log.isEnabledFor(DEBUG):
             dlist = dashlist(
-                str("%i: %s target=%s optional=%s" % (i, s, s.target, s.optional))
+                f"{i}: {s} target={s.target} optional={s.optional}"
                 for i, s in enumerate(specs)
             )
             log.debug("Solving for: %s", dlist)

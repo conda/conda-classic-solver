@@ -120,7 +120,7 @@ def my_TEST(Mfunc, Cfunc, mmin, mmax, is_iter):
             Cpos = Clauses()
             Cneg = Clauses()
             for k in range(1, m + 1):
-                nm = "x%d" % k
+                nm = f"x{k:d}"
                 C.new_var(nm)
                 Cpos.new_var(nm)
                 Cneg.new_var(nm)
@@ -317,7 +317,7 @@ def test_LinearBound():
         Cneg = Clauses(N)
         if isinstance(eq, dict):
             for k in range(1, N + 1):
-                nm = "x%d" % k
+                nm = f"x{k:d}"
                 C.name_var(k, nm)
                 Cpos.name_var(k, nm)
                 Cneg.name_var(k, nm)
