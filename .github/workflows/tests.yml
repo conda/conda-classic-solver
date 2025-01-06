@@ -180,16 +180,12 @@ jobs:
       - name: Run conda-classic-solver Tests
         working-directory: conda-classic-solver
         if: ${{ matrix.test-type == 'conda-classic-solver' }}
-        shell: cmd /C CALL {0}
+        shell: bash -el {0}
         run: |
-          CALL python -m pip install -e ../conda/ --no-deps
-          if errorlevel 1 exit 1
-          CALL python -m conda init --all
-          if errorlevel 1 exit 1
-          CALL %CONDA_PREFIX%\Scripts\activate.bat
-          if errorlevel 1 exit 1
-          python -m pytest -vv -m "not slow" --reruns=${{ env.PYTEST_RERUN_FAILURES }} --durations=16 || exit 1
-          exit 0
+          python -m pip install -e ../conda/ --no-deps
+          python -m conda init --all
+          . $CONDA_PREFIX/etc/profile.d/conda.sh
+          python -m pytest -vv -m "not slow" --reruns=${{ env.PYTEST_RERUN_FAILURES }} --durations=16
       #/ CONDA-CLASSIC-SOLVER CHANGE
 
       - name: Upload Coverage
