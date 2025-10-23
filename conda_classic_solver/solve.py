@@ -130,10 +130,7 @@ class ClassicSolver(Solver):
 
         log.debug(
             # noqa
-            "solving prefix %s\n"
-            "  specs_to_remove: %s\n"
-            "  specs_to_add: %s\n"
-            "  prune: %s",
+            "solving prefix %s\n  specs_to_remove: %s\n  specs_to_add: %s\n  prune: %s",
             self.prefix,
             self.specs_to_remove,
             self.specs_to_add,
