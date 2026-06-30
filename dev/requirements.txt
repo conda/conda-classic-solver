@@ -1,3 +1,2 @@
-python>=3.8
-conda-canary/label/conda-conda-pr-14170::conda  # temporary
+conda >=23.7.3
 pycosat >=0.6.3
