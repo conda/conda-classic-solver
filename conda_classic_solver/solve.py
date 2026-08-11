@@ -25,7 +25,7 @@ from conda.base.constants import (
 )
 from conda.base.context import context
 from conda.common.constants import NULL, TRACE
-from conda.common.io import Spinner, dashlist, time_recorder
+from conda.common.io import dashlist, time_recorder
 from conda.common.iterators import groupby_to_dict as groupby
 from conda.common.path import get_major_minor_version, paths_equal
 from conda.core.index import _supplement_index_with_system, get_reduced_index
@@ -42,6 +42,7 @@ from conda.models.channel import Channel
 from conda.models.match_spec import MatchSpec
 from conda.models.prefix_graph import PrefixGraph
 from conda.models.version import VersionOrder
+from conda.reporters import get_spinner
 
 try:
     from frozendict import frozendict
@@ -182,11 +183,7 @@ class ClassicSolver(Solver):
                 return IndexedSet(PrefixGraph(ssc.solution_precs).graph)
 
         if not ssc.r:
-            with Spinner(
-                f"Collecting package metadata ({self._repodata_fn})",
-                not context.verbose and not context.quiet and not retrying,
-                context.json,
-            ):
+            with get_spinner(f"Collecting package metadata ({self._repodata_fn})"):
                 ssc = self._collect_all_metadata(ssc)
 
         if should_retry_solve and update_modifier == UpdateModifier.FREEZE_INSTALLED:
@@ -202,12 +199,7 @@ class ClassicSolver(Solver):
         else:
             fail_message = "failed\n"
 
-        with Spinner(
-            "Solving environment",
-            not context.verbose and not context.quiet,
-            context.json,
-            fail_message=fail_message,
-        ):
+        with get_spinner("Solving environment", fail_message=fail_message):
             ssc = self._remove_specs(ssc)
             ssc = self._add_specs(ssc)
             solution_precs = copy.copy(ssc.solution_precs)
