@@ -28,7 +28,7 @@ from conda.common.constants import NULL, TRACE
 from conda.common.io import dashlist, time_recorder
 from conda.common.iterators import groupby_to_dict as groupby
 from conda.common.path import get_major_minor_version, paths_equal
-from conda.core.index import _supplement_index_with_system, get_reduced_index
+from conda.core.index import Index, ReducedIndex
 from conda.core.prefix_data import PrefixData
 from conda.core.solve import Solver, get_pinned_specs
 from conda.core.subdir_data import SubdirData
@@ -364,8 +364,7 @@ class ClassicSolver(Solver):
                     ssc.specs_map[pkg_name] = MatchSpec(pkg_name)
 
             # Add virtual packages so they are taken into account by the solver
-            virtual_pkg_index = {}
-            _supplement_index_with_system(virtual_pkg_index)
+            virtual_pkg_index = Index().system_packages
             virtual_pkgs = [p.name for p in virtual_pkg_index.keys()]
             for virtual_pkgs_name in virtual_pkgs:
                 if virtual_pkgs_name not in ssc.specs_map:
@@ -1094,7 +1093,6 @@ class ClassicSolver(Solver):
         if hasattr(self, "_index") and self._index:
             # added in install_actions for conda-build back-compat
             self._prepared_specs = prepared_specs
-            _supplement_index_with_system(self._index)
             self._r = Resolve(self._index, channels=self.channels)
         else:
             # add in required channels that aren't explicitly given in the channels list
@@ -1102,26 +1100,27 @@ class ClassicSolver(Solver):
             #  is given by PrefixData(self.prefix).all_subdir_urls().  However that causes
             #  usability problems with bad / expired tokens.
 
-            additional_channels = set()
+            additional_channels = {}
             for spec in self.specs_to_add:
                 # TODO: correct handling for subdir isn't yet done
                 channel = spec.get_exact_value("channel")
-                if channel:
-                    additional_channels.add(Channel(channel))
+                if channel and channel not in self.channels:
+                    additional_channels.setdefault(Channel(channel))
 
-            self.channels.update(additional_channels)
-
-            reduced_index = get_reduced_index(
-                self.prefix,
-                self.channels,
-                self.subdirs,
-                prepared_specs,
-                self._repodata_fn,
-            )
-            _supplement_index_with_system(reduced_index)
+            self.channels = (*self.channels, *additional_channels)
 
             self._prepared_specs = prepared_specs
-            self._index = reduced_index
+            self._index = reduced_index = ReducedIndex(
+                prepared_specs,
+                channels=self.channels,
+                prepend=False,
+                subdirs=self.subdirs,
+                use_local=False,
+                use_cache=False,
+                prefix=self.prefix,
+                repodata_fn=self._repodata_fn,
+                use_system=True,
+            )
             self._r = Resolve(reduced_index, channels=self.channels)
 
         self._prepared = True
