@@ -33,7 +33,6 @@ from itertools import chain
 from ._logic import FALSE, TRUE
 from ._logic import Clauses as _Clauses
 
-
 # TODO: We may want to turn the user-facing {TRUE,FALSE} values into an Enum and
 #       hide the _logic.{TRUE,FALSE} values as an implementation detail.
 #       We then have to handle the {TRUE,FALSE} -> _logic.{TRUE,FALSE} conversion

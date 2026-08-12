@@ -14,9 +14,6 @@ from functools import cache
 from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING
 
-from frozendict import frozendict
-from tqdm import tqdm
-
 from conda.auxlib.decorators import memoizemethod
 from conda.base.constants import MAX_CHANNEL_PRIORITY, ChannelPriority, SatSolverChoice
 from conda.base.context import context
@@ -35,6 +32,8 @@ from conda.models.enums import NoarchType, PackageType
 from conda.models.match_spec import MatchSpec
 from conda.models.records import PackageRecord
 from conda.models.version import VersionOrder
+from frozendict import frozendict
+from tqdm import tqdm
 
 from .logic import (
     TRUE,

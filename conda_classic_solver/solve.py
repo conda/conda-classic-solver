@@ -130,7 +130,6 @@ class ClassicSolver(Solver):
         force_remove = context.force_remove if force_remove is NULL else force_remove
 
         log.debug(
-            # noqa
             "solving prefix %s\n  specs_to_remove: %s\n  specs_to_add: %s\n  prune: %s",
             self.prefix,
             self.specs_to_remove,
