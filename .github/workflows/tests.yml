@@ -63,7 +63,6 @@ jobs:
               - 'tests/**'
               - '*.py'
               - '.github/workflows/tests.yml'
-              - 'dev/requirements.txt'
           # /CONDA-CLASSIC-SOLVER
 
   # windows test suite
@@ -165,8 +164,8 @@ jobs:
           --file tests\requirements-${{ runner.os }}.txt
           --file tests\requirements-ci.txt
           --file tests\requirements-s3.txt
-          --file ..\conda-classic-solver\dev\requirements.txt
           --file ..\conda-classic-solver\tests\requirements.txt
+          --file ..\conda-classic-solver\tests\requirements-ci.txt
           python=${{ matrix.python-version }}
 
       # CONDA-CLASSIC-SOLVER
@@ -351,8 +350,8 @@ jobs:
           --file tests/requirements-${{ runner.os }}.txt
           --file tests/requirements-ci.txt
           --file tests/requirements-s3.txt
-          --file ../conda-classic-solver/dev/requirements.txt
           --file ../conda-classic-solver/tests/requirements.txt
+          --file ../conda-classic-solver/tests/requirements-ci.txt
           python=${{ matrix.python-version }}
 
       # CONDA-CLASSIC-SOLVER
@@ -887,8 +886,8 @@ jobs:
           --file tests/requirements.txt
           --file tests/requirements-ci.txt
           --file tests/requirements-s3.txt
-          --file ../conda-classic-solver/dev/requirements.txt
           --file ../conda-classic-solver/tests/requirements.txt
+          --file ../conda-classic-solver/tests/requirements-ci.txt
           python=${{ matrix.python-version }}
 
       # CONDA-CLASSIC-SOLVER
