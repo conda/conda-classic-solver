@@ -44,31 +44,65 @@ markers = [
 
 [tool.ruff]
 exclude = ["tests/data/"]
+show-fixes = true
 target-version = "py38"
 
 [tool.ruff.lint]
-# E, W = pycodestyle errors and warnings
-# F = pyflakes
-# I = isort
-# D = pydocstyle
-# UP = pyupgrade
-# ISC = flake8-implicit-str-concat
-# TCH = flake8-type-checking
-# T10 = flake8-debugger
-# FA = flake8-future-annotations
-# see also https://docs.astral.sh/ruff/rules/
-select = ["E", "W", "F", "I", "D1", "UP", "ISC", "TCH", "T10", "FA"]
-# E402 module level import not at top of file
-# E501 line too long
-# E722 do not use bare 'except'
-# E731 do not assign a lambda expression, use a def
-# D101 Missing docstring in public class
-# D102 Missing docstring in public method
-# D103 Missing docstring in public function
-# D104 Missing docstring in public package
-# D105 Missing docstring in magic method
-# D107 Missing docstring in `__init__`
-ignore = ["E402", "E501", "E722", "E731", "D101", "D102", "D103", "D104", "D105", "D107"]
-extend-per-file-ignores = {"docs/*" = ["D1"], "tests/*" = ["D1"]}
-pydocstyle = {convention = "pep257"}
 flake8-type-checking = {exempt-modules = [], strict = true}
+ignore = [
+  "D101",  # Missing docstring in public class
+  "D102",  # Missing docstring in public method
+  "D103",  # Missing docstring in public function
+  "D104",  # Missing docstring in public package
+  "D105",  # Missing docstring in magic method
+  "D107",  # Missing docstring in `__init__`
+  "E402",  # module level import not at top of file
+  "E501",  # line too long
+  "E722",  # do not use bare 'except'
+  "E731",  # do not assign a lambda expression, use a def
+  "UP031",  # do not fix printf-style string formatting
+]
+pydocstyle = {convention = "google"}
+# see https://docs.astral.sh/ruff/rules/
+select = [
+  # Enable ANN locally for type hints linting
+  # "ANN", # flake8-annotations
+  "B012",  # bugbear
+  "D1",  # pydocstyle
+  "E",  # pycodestyle errors
+  "F",  # pyflakes
+  "FA",  # flake8-future-annotations
+  "G",  # flake8-logging-format
+  "I",  # isort
+  "ISC",  # flake8-implicit-str-concat
+  "LOG",  # flake8-logging
+  "RUF100",  # Unused noqa directive
+  "S101",  # forbid assert
+  "T10",  # flake8-debugger
+  "TC",  # flake8-type-checking
+  "TID251",  # flake8-tidy-imports: banned-api
+  "TID253",  # flake8-tidy-imports: banned-module-level-imports
+  "UP",  # pyupgrade
+  "W",  # pycodestyle warnings
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"docs/*" = [
+  "ANN",  # flake8-annotations
+  "D1",  # pydocstyle
+]
+"tests/*" = [
+  "ANN",  # flake8-annotations
+  "D1",  # pydocstyle
+  "S101",  # forbid assert
+  "TID251",  # flake8-tidy-imports
+  "TID253",  # flake8-tidy-imports: tests may import requests directly
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+# Prevent accidental module-level imports of heavy packages on the startup path.
+# Files that legitimately import these packages should suppress with # noqa: TID253.
+banned-module-level-imports = ["requests"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"json".msg = "Use `conda.common.serialize.json` instead."

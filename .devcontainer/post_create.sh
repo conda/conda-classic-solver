@@ -35,6 +35,6 @@ echo "Installing dev & test dependencies..."
     --file="$SRC_CONDA/tests/requirements-ci.txt" \
     --file="$SRC_CONDA/tests/requirements-Linux.txt" \
     --file="$SRC_CONDA/tests/requirements-s3.txt" \
-    --file="$SRC_CONDA_CLASSIC_SOLVER/dev/requirements.txt" \
-    --file="$SRC_CONDA_CLASSIC_SOLVER/tests/requirements.txt"\
+    --file="$SRC_CONDA_CLASSIC_SOLVER/tests/requirements.txt" \
+    --file="$SRC_CONDA_CLASSIC_SOLVER/tests/requirements-ci.txt" \
     pre-commit

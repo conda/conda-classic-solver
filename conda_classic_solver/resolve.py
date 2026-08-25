@@ -8,11 +8,11 @@ See conda.core.solver.Solver for the high-level API.
 
 from __future__ import annotations
 
-import copy
 import itertools
 from collections import defaultdict, deque
-from functools import lru_cache
+from functools import cache
 from logging import DEBUG, getLogger
+from typing import TYPE_CHECKING
 
 from conda.auxlib.decorators import memoizemethod
 from conda.base.constants import MAX_CHANNEL_PRIORITY, ChannelPriority, SatSolverChoice
@@ -27,17 +27,13 @@ from conda.exceptions import (
     ResolvePackageNotFound,
     UnsatisfiableError,
 )
-from conda.models.channel import Channel, MultiChannel
+from conda.models.channel import Channel
 from conda.models.enums import NoarchType, PackageType
 from conda.models.match_spec import MatchSpec
 from conda.models.records import PackageRecord
 from conda.models.version import VersionOrder
+from frozendict import frozendict
 from tqdm import tqdm
-
-try:
-    from frozendict import frozendict
-except ImportError:
-    from conda._vendor.frozendict import FrozenOrderedDict as frozendict
 
 from .logic import (
     TRUE,
@@ -48,8 +44,13 @@ from .logic import (
     minimal_unsatisfiable_subset,
 )
 
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from conda.exceptions import UnsatisfiableConflictMap
+
 log = getLogger(__name__)
-stdoutlog = getLogger("conda.stdoutlog")
+
 
 # used in conda build
 Unsatisfiable = UnsatisfiableError
@@ -62,7 +63,7 @@ _sat_solvers = {
 }
 
 
-@lru_cache(maxsize=None)
+@cache
 def _get_sat_solver_cls(sat_solver_choice=SatSolverChoice.PYCOSAT):
     def try_out_solver(sat_solver):
         c = Clauses(sat_solver=sat_solver)
@@ -179,19 +180,16 @@ class Resolve:
         )
 
     def default_filter(self, features=None, filter=None):
-        # TODO: fix this import; this is bad
-        from conda.core.subdir_data import make_feature_record
-
         if filter is None:
             filter = {}
         else:
             filter.clear()
 
         filter.update(
-            {make_feature_record(fstr): False for fstr in self.trackers.keys()}
+            {PackageRecord.feature(name): False for name in self.trackers.keys()}
         )
         if features:
-            filter.update({make_feature_record(fstr): True for fstr in features})
+            filter.update({PackageRecord.feature(name): True for name in features})
         return filter
 
     def valid(self, spec_or_prec, filter, optional=True):
@@ -339,9 +337,13 @@ class Resolve:
         return tuple(non_tf_specs), feature_names
 
     def _classify_bad_deps(
-        self, bad_deps, specs_to_add, history_specs, strict_channel_priority
-    ):
-        classes = {
+        self,
+        bad_deps: list[list[MatchSpec]],
+        specs_to_add,
+        history_specs,
+        strict_channel_priority,
+    ) -> UnsatisfiableConflictMap:
+        classes: UnsatisfiableConflictMap = {
             "python": set(),
             "request_conflict_with_history": set(),
             "direct": set(),
@@ -399,11 +401,11 @@ class Resolve:
 
         if classes["python"]:
             # filter out plain single-entry python conflicts.  The python section explains these.
-            classes["direct"] = [
+            classes["direct"] = {
                 _
                 for _ in classes["direct"]
                 if _[1].startswith("python ") or len(_[0]) > 1
-            ]
+            }
         return classes
 
     def find_matches_with_strict(self, ms, strict_channel_priority):
@@ -490,7 +492,12 @@ class Resolve:
                             queue.append(new_path)
         return dep_graph, all_deps
 
-    def build_conflict_map(self, specs, specs_to_add=None, history_specs=None):
+    def build_conflict_map(
+        self,
+        specs: Iterable[MatchSpec],
+        specs_to_add=None,
+        history_specs=None,
+    ) -> UnsatisfiableConflictMap:
         """Perform a deeper analysis on conflicting specifications, by attempting
         to find the common dependencies that might be the cause of conflicts.
 
@@ -499,7 +506,7 @@ class Resolve:
             It is assumed that the specs conflict.
 
         Returns:
-            bad_deps: A list of lists of bad deps
+            Classified conflict map for :class:`~conda.exceptions.UnsatisfiableError`.
 
         Strategy:
             If we're here, we know that the specs conflict. This could be because:
@@ -617,10 +624,12 @@ class Resolve:
                         )
                         chains.extend(c)
 
-        bad_deps = self._classify_bad_deps(
-            chains, specs_to_add, history_specs, strict_channel_priority
+        return self._classify_bad_deps(
+            chains,
+            specs_to_add,
+            history_specs,
+            strict_channel_priority,
         )
-        return bad_deps
 
     def _get_strict_channel(self, package_name):
         channel_name = None
@@ -665,9 +674,6 @@ class Resolve:
     def get_reduced_index(
         self, explicit_specs, sort_by_exactness=True, exit_on_conflict=False
     ):
-        # TODO: fix this import; this is bad
-        from conda.core.subdir_data import make_feature_record
-
         strict_channel_priority = context.channel_priority == ChannelPriority.STRICT
 
         cache_key = strict_channel_priority, tuple(explicit_specs)
@@ -811,7 +817,7 @@ class Resolve:
 
         # Determine all valid packages in the dependency graph
         reduced_index2 = {
-            prec: prec for prec in (make_feature_record(fstr) for fstr in features)
+            prec: prec for prec in (PackageRecord.feature(name) for name in features)
         }
         specs_by_name_seed = {}
         for s in explicit_specs:
@@ -839,7 +845,7 @@ class Resolve:
                 #    broadening check to apply across packages at the explicit level; only
                 #    at the level of deps below that explicit package.
                 seen_specs = set()
-                specs_by_name = copy.deepcopy(specs_by_name_seed)
+                specs_by_name = {k: v[:] for k, v in specs_by_name_seed.items()}
 
                 dep_specs = set(self.ms_depends(pkg))
                 for dep in dep_specs:
@@ -937,7 +943,7 @@ class Resolve:
         channel = prec.channel
         channel_priority = self._channel_priorities_map.get(
             channel.name, 1
-        )  # TODO: ask @mcg1969 why the default value is 1 here  # NOQA
+        )  # TODO: ask @mcg1969 why the default value is 1 here
         valid = 1 if channel_priority < MAX_CHANNEL_PRIORITY else 0
         version_comparator = VersionOrder(prec.get("version", ""))
         build_number = prec.get("build_number", 0)
@@ -954,17 +960,28 @@ class Resolve:
         return vkey
 
     @staticmethod
-    def _make_channel_priorities(channels):
+    def _make_channel_priorities(channels: Iterable[Channel | str]) -> dict[str, int]:
         priorities_map = {}
-        for priority_counter, chn in enumerate(
-            itertools.chain.from_iterable(
-                (Channel(cc) for cc in c._channels)
-                if isinstance(c, MultiChannel)
-                else (c,)
-                for c in (Channel(c) for c in channels)
-            )
-        ):
-            channel_name = chn.name
+        """Make a dictionary of channel priorities.
+
+        Maps channel names to priorities, e.g.:
+
+        .. code-block:: pycon
+
+           >>> Resolve._make_channel_priorities(["conda-canary", "defaults", "conda-forge"])
+           {
+               'conda-canary': 0,
+               'pkgs/main': 1,
+               'pkgs/r': 2,
+               'conda-forge': 3,
+           }
+
+        Compare with ``conda.models.channel.prioritize_channels``.
+        """
+        channel_names = (
+            channel.name for name in channels for channel in Channel(name).channels
+        )
+        for priority_counter, channel_name in enumerate(channel_names):
             if channel_name in priorities_map:
                 continue
             priorities_map[channel_name] = min(
@@ -1013,7 +1030,8 @@ class Resolve:
         if nm:
             tgroup = libs = self.groups.get(nm, [])
         elif tf:
-            assert len(tf) == 1
+            if len(tf) != 1:
+                raise RuntimeError
             k = next(iter(tf))
             tgroup = libs = self.trackers.get(k, [])
         else:
@@ -1197,7 +1215,8 @@ class Resolve:
         self,
         must_have: dict[str, PackageRecord],
     ) -> list[PackageRecord]:
-        assert isinstance(must_have, dict)
+        if not isinstance(must_have, dict):
+            raise TypeError("'must_have' must be a dict.")
 
         digraph = {}  # dict[str, set[dependent_package_names]]
         for package_name, prec in must_have.items():
@@ -1435,13 +1454,13 @@ class Resolve:
         specs = set(specs)
         if log.isEnabledFor(DEBUG):
             dlist = dashlist(
-                f"{i}: {s} target={s.target} optional={s.optional}"
+                str("%i: %s target=%s optional=%s" % (i, s, s.target, s.optional))
                 for i, s in enumerate(specs)
             )
             log.debug("Solving for: %s", dlist)
 
         if not specs:
-            return ()
+            return []
 
         # Find the compliant packages
         log.debug("Solve: Getting reduced index of compliant packages")
@@ -1464,9 +1483,7 @@ class Resolve:
             if not_found_packages:
                 raise ResolvePackageNotFound(not_found_packages)
             elif wrong_version_packages:
-                raise UnsatisfiableError(
-                    [[d] for d in wrong_version_packages], chains=False
-                )
+                self.find_conflicts(wrong_version_packages, specs_to_add, history_specs)
             if should_retry_solve:
                 # We don't want to call find_conflicts until our last try.
                 # This jumps back out to conda/cli/install.py, where the
@@ -1643,7 +1660,9 @@ class Resolve:
             common = set.intersection(*psols2)
             diffs = [sorted(set(sol) - common) for sol in psols2]
             if not context.json:
-                stdoutlog.info(
+                from conda.gateways.streams import stdoutlog
+
+                stdoutlog(
                     "\nWarning: {} possible package resolutions "
                     "(only showing differing packages):{}{}".format(
                         ">10" if nsol > 10 else nsol,

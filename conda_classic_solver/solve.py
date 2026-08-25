@@ -25,10 +25,10 @@ from conda.base.constants import (
 )
 from conda.base.context import context
 from conda.common.constants import NULL, TRACE
-from conda.common.io import Spinner, dashlist, time_recorder
+from conda.common.io import dashlist, time_recorder
 from conda.common.iterators import groupby_to_dict as groupby
 from conda.common.path import get_major_minor_version, paths_equal
-from conda.core.index import _supplement_index_with_system, get_reduced_index
+from conda.core.index import Index, ReducedIndex
 from conda.core.prefix_data import PrefixData
 from conda.core.solve import Solver, get_pinned_specs
 from conda.core.subdir_data import SubdirData
@@ -42,6 +42,7 @@ from conda.models.channel import Channel
 from conda.models.match_spec import MatchSpec
 from conda.models.prefix_graph import PrefixGraph
 from conda.models.version import VersionOrder
+from conda.reporters import get_spinner
 
 try:
     from frozendict import frozendict
@@ -129,7 +130,6 @@ class ClassicSolver(Solver):
         force_remove = context.force_remove if force_remove is NULL else force_remove
 
         log.debug(
-            # noqa
             "solving prefix %s\n  specs_to_remove: %s\n  specs_to_add: %s\n  prune: %s",
             self.prefix,
             self.specs_to_remove,
@@ -182,11 +182,7 @@ class ClassicSolver(Solver):
                 return IndexedSet(PrefixGraph(ssc.solution_precs).graph)
 
         if not ssc.r:
-            with Spinner(
-                f"Collecting package metadata ({self._repodata_fn})",
-                not context.verbose and not context.quiet and not retrying,
-                context.json,
-            ):
+            with get_spinner(f"Collecting package metadata ({self._repodata_fn})"):
                 ssc = self._collect_all_metadata(ssc)
 
         if should_retry_solve and update_modifier == UpdateModifier.FREEZE_INSTALLED:
@@ -202,12 +198,7 @@ class ClassicSolver(Solver):
         else:
             fail_message = "failed\n"
 
-        with Spinner(
-            "Solving environment",
-            not context.verbose and not context.quiet,
-            context.json,
-            fail_message=fail_message,
-        ):
+        with get_spinner("Solving environment", fail_message=fail_message):
             ssc = self._remove_specs(ssc)
             ssc = self._add_specs(ssc)
             solution_precs = copy.copy(ssc.solution_precs)
@@ -372,8 +363,7 @@ class ClassicSolver(Solver):
                     ssc.specs_map[pkg_name] = MatchSpec(pkg_name)
 
             # Add virtual packages so they are taken into account by the solver
-            virtual_pkg_index = {}
-            _supplement_index_with_system(virtual_pkg_index)
+            virtual_pkg_index = Index().system_packages
             virtual_pkgs = [p.name for p in virtual_pkg_index.keys()]
             for virtual_pkgs_name in virtual_pkgs:
                 if virtual_pkgs_name not in ssc.specs_map:
@@ -1102,7 +1092,6 @@ class ClassicSolver(Solver):
         if hasattr(self, "_index") and self._index:
             # added in install_actions for conda-build back-compat
             self._prepared_specs = prepared_specs
-            _supplement_index_with_system(self._index)
             self._r = Resolve(self._index, channels=self.channels)
         else:
             # add in required channels that aren't explicitly given in the channels list
@@ -1110,26 +1099,27 @@ class ClassicSolver(Solver):
             #  is given by PrefixData(self.prefix).all_subdir_urls().  However that causes
             #  usability problems with bad / expired tokens.
 
-            additional_channels = set()
+            additional_channels = {}
             for spec in self.specs_to_add:
                 # TODO: correct handling for subdir isn't yet done
                 channel = spec.get_exact_value("channel")
-                if channel:
-                    additional_channels.add(Channel(channel))
+                if channel and channel not in self.channels:
+                    additional_channels.setdefault(Channel(channel))
 
-            self.channels.update(additional_channels)
-
-            reduced_index = get_reduced_index(
-                self.prefix,
-                self.channels,
-                self.subdirs,
-                prepared_specs,
-                self._repodata_fn,
-            )
-            _supplement_index_with_system(reduced_index)
+            self.channels = (*self.channels, *additional_channels)
 
             self._prepared_specs = prepared_specs
-            self._index = reduced_index
+            self._index = reduced_index = ReducedIndex(
+                prepared_specs,
+                channels=self.channels,
+                prepend=False,
+                subdirs=self.subdirs,
+                use_local=False,
+                use_cache=False,
+                prefix=self.prefix,
+                repodata_fn=self._repodata_fn,
+                use_system=True,
+            )
             self._r = Resolve(reduced_index, channels=self.channels)
 
         self._prepared = True

@@ -7,7 +7,8 @@ The hooks for the conda solver plugin system.
 
 from typing import Iterable
 
-from conda.plugins import CondaSolver, hookimpl
+from conda.plugins import hookimpl
+from conda.plugins.types import CondaSolver
 
 from .solve import ClassicSolver
 

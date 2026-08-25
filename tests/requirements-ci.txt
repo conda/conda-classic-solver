@@ -1,0 +1,8 @@
+darker
+flake8
+mypy
+pre-commit
+pytest
+pytest-cov
+pytest-mock
+pyupgrade
