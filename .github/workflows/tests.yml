@@ -33,7 +33,9 @@ env:
   # https://conda.github.io/conda-libmamba-solver/user-guide/configuration/#advanced-options
   CONDA_LIBMAMBA_SOLVER_NO_CHANNELS_FROM_INSTALLED: true
   # focused testing or any needed pytest arguments, default empty
-  PYTEST_EXTRA: ''
+  # CONDA-CLASSIC-SOLVER: test_dont_remove_conda_3 spawns a subprocess conda without the classic
+  # plugin installed, so it can't pass under CONDA_TEST_SOLVERS=classic; skip it here.
+  PYTEST_EXTRA: '--deselect=tests/test_create.py::test_dont_remove_conda_3[classic]'
 
 jobs:
   # detect whether any code changes are included in this PR
