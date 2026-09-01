@@ -5,6 +5,7 @@
 The hooks for the conda solver plugin system.
 """
 
+from functools import cache
 from typing import Iterable
 
 from conda import __version__ as conda_version
@@ -19,6 +20,7 @@ from .solve import ClassicSolver
 CLASSIC_LAST_RELEASE = Version("26.7.1")
 
 
+@cache
 def _conda_has_classic() -> bool:
     """Return whether conda already ships a built-in ``classic`` solver."""
     return Version(conda_version) <= CLASSIC_LAST_RELEASE
