@@ -29,6 +29,7 @@ test:
   imports:
     - conda_classic_solver
   commands:
+    - conda create -n test --dry-run scipy --solver=pycosat
     - conda create -n test --dry-run scipy --solver=classic
     - >-
       python -c
