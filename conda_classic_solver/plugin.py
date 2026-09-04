@@ -15,9 +15,9 @@ from packaging.version import Version
 
 from .solve import ClassicSolver
 
-# conda ships a built-in ``classic`` solver through 26.7.1; the remove-classic
-# work (26.7.2.dev and later) no longer loads it.
-CLASSIC_LAST_RELEASE = Version("26.7.1")
+# conda ships a built-in ``classic`` solver through 26.7.2; the remove-classic
+# work no longer loads it.
+CLASSIC_LAST_RELEASE = Version("26.7.2")
 
 
 @cache
