@@ -9,9 +9,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = html_title = "conda-classic-solver"
-copyright = "2024, conda-classic-solver contributors"
-author = "conda-classic-solver contributors"
+project = html_title = "conda-pycosat-solver"
+copyright = "2024, conda-pycosat-solver contributors"
+author = "conda-pycosat-solver contributors"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -70,13 +70,13 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "GitHub",
-            "url": "https://github.com/conda/conda-classic-solver",
+            "url": "https://github.com/conda/conda-pycosat-solver",
             "icon": "fa-brands fa-square-github",
             "type": "fontawesome",
         },
         {
             "name": "Element",
-            "url": "https://matrix.to/#/#conda-classic-solver:matrix.org",
+            "url": "https://matrix.to/#/#conda-pycosat-solver:matrix.org",
             "icon": "_static/element_logo.svg",
             "type": "local",
         },
@@ -91,7 +91,7 @@ html_theme_options = {
 
 html_context = {
     "github_user": "conda",
-    "github_repo": "conda-classic-solver",
+    "github_repo": "conda-pycosat-solver",
     "github_version": "main",
     "doc_path": "docs",
 }

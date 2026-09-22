@@ -1,7 +1,7 @@
 # Copyright (C) 2012 Anaconda, Inc
 # Copyright (C) 2023 conda
 # SPDX-License-Identifier: BSD-3-Clause
-"""The classic solver implementation."""
+"""The pycosat (classic) solver implementation."""
 
 from __future__ import annotations
 
@@ -57,9 +57,9 @@ if TYPE_CHECKING:
 log = getLogger(__name__)
 
 
-class ClassicSolver(Solver):
+class PycosatSolver(Solver):
     """
-    High-level logic for the 'classic' (pycosat) solver in conda.
+    High-level logic for the 'pycosat' (formerly 'classic') solver in conda.
     """
 
     supports_exclude_newer_global = True

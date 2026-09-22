@@ -1,5 +1,5 @@
 package:
-  name: "conda-classic-solver"
+  name: "conda-pycosat-solver"
   # VERSION_OVERRIDE is used by the canary release workflow
   version: {{ os.getenv("VERSION_OVERRIDE") or GIT_DESCRIBE_TAG }}.{{ GIT_DESCRIBE_NUMBER }}+{{ GIT_DESCRIBE_HASH }}
 
@@ -27,26 +27,26 @@ requirements:
 
 test:
   imports:
-    - conda_classic_solver
+    - conda_pycosat_solver
   commands:
     - conda create -n test --dry-run scipy --solver=pycosat
     - conda create -n test --dry-run scipy --solver=classic
     - >-
       python -c
-      "import conda_classic_solver as classic;
+      "import conda_pycosat_solver as pycosat;
       from importlib.metadata import version;
-      assert '{{ PKG_VERSION }}' == classic.__version__ == version('conda_classic_solver'),
-      '{{ PKG_VERSION }}' + f', {classic.__version__}, ' + version('conda_classic_solver')
+      assert '{{ PKG_VERSION }}' == pycosat.__version__ == version('conda_pycosat_solver'),
+      '{{ PKG_VERSION }}' + f', {pycosat.__version__}, ' + version('conda_pycosat_solver')
       " || true
     # we accept errors here because GIT_DESCRIBE_TAG has some accuracy issues.
     # Shouldn't happen in production recipes; aka do not add '|| true' in the feedstock
 
 about:
-  home: https://github.com/conda/conda-classic-solver
+  home: https://github.com/conda/conda-pycosat-solver
   license: BSD-3-Clause
   license_family: BSD
   license_file: src/LICENSE
-  summary: 'The `classic` solver used in `conda`.'
+  summary: 'The `pycosat` solver used in `conda`, also available as `classic`.'
 
 extra:
   recipe-maintainers:

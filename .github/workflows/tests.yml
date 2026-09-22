@@ -33,7 +33,7 @@ env:
   # https://conda.github.io/conda-libmamba-solver/user-guide/configuration/#advanced-options
   CONDA_LIBMAMBA_SOLVER_NO_CHANNELS_FROM_INSTALLED: true
   # focused testing or any needed pytest arguments, default empty
-  # CONDA-CLASSIC-SOLVER: test_dont_remove_conda_3 spawns a subprocess conda without the classic
+  # CONDA-PYCOSAT-SOLVER: test_dont_remove_conda_3 spawns a subprocess conda without the classic
   # plugin installed, so it can't pass under CONDA_TEST_SOLVERS=classic; skip it here.
   PYTEST_EXTRA: '--deselect=tests/test_create.py::test_dont_remove_conda_3[classic]'
 
@@ -58,14 +58,14 @@ jobs:
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         id: filter
         with:
-          # CONDA-CLASSIC-SOLVER
+          # CONDA-PYCOSAT-SOLVER
           filters: |
             code:
-              - 'conda_classic_solver/**'
+              - 'conda_pycosat_solver/**'
               - 'tests/**'
               - '*.py'
               - '.github/workflows/tests.yml'
-          # /CONDA-CLASSIC-SOLVER
+          # /CONDA-PYCOSAT-SOLVER
 
   # windows test suite
   windows:
@@ -80,27 +80,27 @@ jobs:
       fail-fast: false
       matrix:
         # test lower version (w/ defaults) and upper version (w/ defaults and conda-forge)
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']  # CONDA-CLASSIC-SOLVER
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']  # CONDA-PYCOSAT-SOLVER
         default-channel: [defaults, conda-forge]
-        test-type: [conda-classic-solver, unit, integration]  # CONDA-CLASSIC-SOLVER
+        test-type: [conda-pycosat-solver, unit, integration]  # CONDA-PYCOSAT-SOLVER
         test-group: [1, 2, 3]
         exclude:
           - default-channel: conda-forge
             python-version: '3.10'
           - test-type: unit
             test-group: 3
-          - test-type: conda-classic-solver  # CONDA-CLASSIC-SOLVER
-            test-group: 2  # CONDA-CLASSIC-SOLVER
-          - test-type: conda-classic-solver  # CONDA-CLASSIC-SOLVER
-            test-group: 3  # CONDA-CLASSIC-SOLVER
+          - test-type: conda-pycosat-solver  # CONDA-PYCOSAT-SOLVER
+            test-group: 2  # CONDA-PYCOSAT-SOLVER
+          - test-type: conda-pycosat-solver  # CONDA-PYCOSAT-SOLVER
+            test-group: 3  # CONDA-PYCOSAT-SOLVER
     env:
       ErrorActionPreference: Stop  # powershell exit immediately on error
       PYTEST_MARKER: ${{ matrix.test-type == 'unit' && 'not integration and not benchmark' || 'integration and not benchmark' }}
       PYTEST_SPLITS: ${{ matrix.test-type == 'unit' && '2' || '3' }}
-      CONDA_TEST_SOLVERS: classic  # CONDA-CLASSIC-SOLVER
+      CONDA_TEST_SOLVERS: classic  # CONDA-PYCOSAT-SOLVER
 
     steps:
-      # CONDA-CLASSIC-SOLVER
+      # CONDA-PYCOSAT-SOLVER
       - name: Checkout conda
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -109,12 +109,12 @@ jobs:
           ref: remove-classic-rebase
           path: conda
 
-      - name: Checkout conda-classic-solver
+      - name: Checkout conda-pycosat-solver
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-          path: conda-classic-solver
-      # /CONDA-CLASSIC-SOLVER
+          path: conda-pycosat-solver
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Set TEMP to D:/Temp
         run: |
@@ -142,7 +142,7 @@ jobs:
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@8ee1f361103df19b6f8c8655fd3967a8ecb162d5 # v4.0.1
         with:
-          condarc-file: conda\.github\condarc-${{ matrix.default-channel }}  # CONDA-CLASSIC-SOLVER
+          condarc-file: conda\.github\condarc-${{ matrix.default-channel }}  # CONDA-PYCOSAT-SOLVER
           run-post: false  # skip post cleanup
           pkgs-dirs: D:\conda_pkgs_dir
           installation-dir: D:\conda
@@ -158,7 +158,7 @@ jobs:
         run: conda install --yes "conda-pypi>=0.10.1" -c conda-forge --override-channels
 
       - name: Conda Install
-        working-directory: conda  # CONDA-CLASSIC-SOLVER
+        working-directory: conda  # CONDA-PYCOSAT-SOLVER
         run: >
           conda install
           --yes
@@ -166,14 +166,14 @@ jobs:
           --file tests\requirements-${{ runner.os }}.txt
           --file tests\requirements-ci.txt
           --file tests\requirements-s3.txt
-          --file ..\conda-classic-solver\tests\requirements.txt
-          --file ..\conda-classic-solver\tests\requirements-ci.txt
+          --file ..\conda-pycosat-solver\tests\requirements.txt
+          --file ..\conda-pycosat-solver\tests\requirements-ci.txt
           python=${{ matrix.python-version }}
 
-      # CONDA-CLASSIC-SOLVER
-      - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
-      # /CONDA-CLASSIC-SOLVER
+      # CONDA-PYCOSAT-SOLVER
+      - name: Install conda-pycosat-solver
+        run: python -m pip install -e conda-pycosat-solver/ -vv --no-deps
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Conda Info
         # view test env info (not base)
@@ -203,8 +203,8 @@ jobs:
           "$env:PWSHPATH" -split ";" | ForEach-Object { Get-Command -All "$_\pwsh" }
 
       - name: Run conda Tests
-        if: matrix.test-type != 'conda-classic-solver'  # CONDA-CLASSIC-SOLVER
-        working-directory: conda  # CONDA-CLASSIC-SOLVER
+        if: matrix.test-type != 'conda-pycosat-solver'  # CONDA-PYCOSAT-SOLVER
+        working-directory: conda  # CONDA-PYCOSAT-SOLVER
         # Windows is sensitive to long paths, using `--basetemp=${{ runner.temp }} to
         # keep the test directories shorter
         run: >
@@ -217,18 +217,18 @@ jobs:
           -m "${{ env.PYTEST_MARKER }}"
           ${{ env.PYTEST_EXTRA }}
 
-      - name: Run conda-classic-solver Tests
-        if: matrix.test-type == 'conda-classic-solver'
-        working-directory: conda-classic-solver
+      - name: Run conda-pycosat-solver Tests
+        if: matrix.test-type == 'conda-pycosat-solver'
+        working-directory: conda-pycosat-solver
         env:
-          # CONDA-CLASSIC-SOLVER: plugin targets conda remove-classic-rebase (Index/ReducedIndex/get_spinner);
+          # CONDA-PYCOSAT-SOLVER: plugin targets conda remove-classic-rebase (Index/ReducedIndex/get_spinner);
           # make the conda checkout importable now that `pip install -e conda/` is gone
           PYTHONPATH: ${{ github.workspace }}/conda
         run: python -m pytest -vv -m "not slow" --durations=16
-      # /CONDA-CLASSIC-SOLVER
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Upload Coverage
-        if: false  # CONDA-CLASSIC-SOLVER
+        if: false  # CONDA-PYCOSAT-SOLVER
         uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4 # v7.1.0
         with:
           flags: ${{ runner.os }},${{ runner.arch }},${{ matrix.python-version }},${{ matrix.test-type }}
@@ -268,7 +268,7 @@ jobs:
           - ubuntu-24.04-arm  # linux-aarch64
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
         default-channel: [defaults, conda-forge]
-        test-type: [conda-classic-solver, unit, integration]  # CONDA-CLASSIC-SOLVER
+        test-type: [conda-pycosat-solver, unit, integration]  # CONDA-PYCOSAT-SOLVER
         test-group: [1, 2, 3]
         exclude:
           - python-version: '3.10'
@@ -279,10 +279,10 @@ jobs:
             default-channel: conda-forge
           - test-type: unit
             test-group: 3
-          - test-type: conda-classic-solver  # CONDA-CLASSIC-SOLVER
-            test-group: 2  # CONDA-CLASSIC-SOLVER
-          - test-type: conda-classic-solver  # CONDA-CLASSIC-SOLVER
-            test-group: 3  # CONDA-CLASSIC-SOLVER
+          - test-type: conda-pycosat-solver  # CONDA-PYCOSAT-SOLVER
+            test-group: 2  # CONDA-PYCOSAT-SOLVER
+          - test-type: conda-pycosat-solver  # CONDA-PYCOSAT-SOLVER
+            test-group: 3  # CONDA-PYCOSAT-SOLVER
           - runs-on: ubuntu-24.04-arm
             python-version: '3.10'
           - runs-on: ubuntu-24.04-arm
@@ -292,10 +292,10 @@ jobs:
     env:
       PYTEST_MARKER: ${{ matrix.test-type == 'unit' && 'not integration and not benchmark' || 'integration and not benchmark' }}
       PYTEST_SPLITS: ${{ matrix.test-type == 'unit' && '2' || '3' }}
-      CONDA_TEST_SOLVERS: classic  # CONDA-CLASSIC-SOLVER
+      CONDA_TEST_SOLVERS: classic  # CONDA-PYCOSAT-SOLVER
 
     steps:
-      # CONDA-CLASSIC-SOLVER
+      # CONDA-PYCOSAT-SOLVER
       - name: Checkout conda
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -304,12 +304,12 @@ jobs:
           ref: remove-classic-rebase
           path: conda
 
-      - name: Checkout conda-classic-solver
+      - name: Checkout conda-pycosat-solver
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-          path: conda-classic-solver
-      # /CONDA-CLASSIC-SOLVER
+          path: conda-pycosat-solver
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Hash + Timestamp
         run: |
@@ -328,7 +328,7 @@ jobs:
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@8ee1f361103df19b6f8c8655fd3967a8ecb162d5 # v4.0.1
         with:
-          condarc-file: conda/.github/condarc-${{ matrix.default-channel }}  # CONDA-CLASSIC-SOLVER
+          condarc-file: conda/.github/condarc-${{ matrix.default-channel }}  # CONDA-PYCOSAT-SOLVER
           run-post: false  # skip post cleanup
           miniconda-version: ${{ matrix.default-channel == 'defaults' && 'latest' || null }}
           miniforge-version: ${{ matrix.default-channel == 'conda-forge' && 'latest' || null }}
@@ -344,7 +344,7 @@ jobs:
         run: conda install --yes "conda-pypi>=0.10.1" -c conda-forge --override-channels
 
       - name: Conda Install
-        working-directory: conda  # CONDA-CLASSIC-SOLVER
+        working-directory: conda  # CONDA-PYCOSAT-SOLVER
         run: >
           conda install
           --yes
@@ -352,14 +352,14 @@ jobs:
           --file tests/requirements-${{ runner.os }}.txt
           --file tests/requirements-ci.txt
           --file tests/requirements-s3.txt
-          --file ../conda-classic-solver/tests/requirements.txt
-          --file ../conda-classic-solver/tests/requirements-ci.txt
+          --file ../conda-pycosat-solver/tests/requirements.txt
+          --file ../conda-pycosat-solver/tests/requirements-ci.txt
           python=${{ matrix.python-version }}
 
-      # CONDA-CLASSIC-SOLVER
-      - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
-      # /CONDA-CLASSIC-SOLVER
+      # CONDA-PYCOSAT-SOLVER
+      - name: Install conda-pycosat-solver
+        run: python -m pip install -e conda-pycosat-solver/ -vv --no-deps
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Conda Info
         # view test env info (not base)
@@ -391,8 +391,8 @@ jobs:
           python -m conda init --all
 
       - name: Run conda Tests
-        if: matrix.test-type != 'conda-classic-solver'  # CONDA-CLASSIC-SOLVER
-        working-directory: conda  # CONDA-CLASSIC-SOLVER
+        if: matrix.test-type != 'conda-pycosat-solver'  # CONDA-PYCOSAT-SOLVER
+        working-directory: conda  # CONDA-PYCOSAT-SOLVER
         run: >
           python -m pytest
           --cov=conda
@@ -402,18 +402,18 @@ jobs:
           -m "${{ env.PYTEST_MARKER }}"
           ${{ env.PYTEST_EXTRA }}
 
-      - name: Run conda-classic-solver Tests
-        if: matrix.test-type == 'conda-classic-solver'
-        working-directory: conda-classic-solver
+      - name: Run conda-pycosat-solver Tests
+        if: matrix.test-type == 'conda-pycosat-solver'
+        working-directory: conda-pycosat-solver
         env:
-          # CONDA-CLASSIC-SOLVER: plugin targets conda remove-classic-rebase (Index/ReducedIndex/get_spinner);
+          # CONDA-PYCOSAT-SOLVER: plugin targets conda remove-classic-rebase (Index/ReducedIndex/get_spinner);
           # make the conda checkout importable now that `pip install -e conda/` is gone
           PYTHONPATH: ${{ github.workspace }}/conda
         run: python -m pytest -vv -m "not slow" --durations=16
-      # /CONDA-CLASSIC-SOLVER
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Upload Coverage
-        if: false  # CONDA-CLASSIC-SOLVER
+        if: false  # CONDA-PYCOSAT-SOLVER
         uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4 # v7.1.0
         with:
           flags: ${{ runner.os }},${{ runner.arch }},${{ matrix.python-version }},${{ matrix.test-type }}
@@ -434,11 +434,11 @@ jobs:
   # linux benchmarks
   linux-benchmarks:
     # only run benchmarks if there are code changes
-    # CONDA-CLASSIC-SOLVER
+    # CONDA-PYCOSAT-SOLVER
     # needs: changes
     if: false
     # needs.changes.outputs.code == 'true'
-    # /CONDA-CLASSIC-SOLVER
+    # /CONDA-PYCOSAT-SOLVER
 
     runs-on: ubuntu-24.04
     defaults:
@@ -497,8 +497,8 @@ jobs:
           python=${{ matrix.python-version }}
           "pytest-benchmark>=5.1.0"
 
-      - name: Install conda-classic-solver  # TEMP
-        run: pip install https://github.com/conda/conda-classic-solver/archive/main.tar.gz --no-deps
+      - name: Install conda-pycosat-solver  # TEMP
+        run: pip install https://github.com/conda/conda-pycosat-solver/archive/main.tar.gz --no-deps
 
       - name: Conda Info
         # view test env info (not base)
@@ -534,11 +534,11 @@ jobs:
   # linux typing
   linux-typing:
     # only run test suite if there are code changes
-    # CONDA-CLASSIC-SOLVER
+    # CONDA-PYCOSAT-SOLVER
     # needs: changes
     if: false
     # needs.changes.outputs.code == 'true'
-    # /CONDA-CLASSIC-SOLVER
+    # /CONDA-PYCOSAT-SOLVER
 
     runs-on: ubuntu-24.04
     defaults:
@@ -597,8 +597,8 @@ jobs:
           --file tests/requirements-typing.txt
           python=${{ matrix.python-version }}
 
-      - name: Install conda-classic-solver  # TEMP
-        run: pip install https://github.com/conda/conda-classic-solver/archive/main.tar.gz --no-deps
+      - name: Install conda-pycosat-solver  # TEMP
+        run: pip install https://github.com/conda/conda-pycosat-solver/archive/main.tar.gz --no-deps
 
       - name: Conda Info
         # view test env info (not base)
@@ -641,12 +641,12 @@ jobs:
   # linux-qemu test suite
   linux-qemu:
     # only run test suite if there are code changes
-    # CONDA-CLASSIC-SOLVER
+    # CONDA-PYCOSAT-SOLVER
     # needs: changes
     if: false
     # (!github.event.repository.fork && github.event_name == 'schedule')
     # || needs.changes.outputs.code == 'true'
-    # /CONDA-CLASSIC-SOLVER
+    # /CONDA-PYCOSAT-SOLVER
 
     # Run one single fast test per docker+qemu emulated linux platform to test that
     # test execution is possible there (container+tools+dependencies work). Can be
@@ -704,11 +704,11 @@ jobs:
   # linux memray
   linux-memray:
     # only run test suite if there are code changes
-    # CONDA-CLASSIC-SOLVER
+    # CONDA-PYCOSAT-SOLVER
     # needs: changes
     if: false
     # needs.changes.outputs.code == 'true'
-    # /CONDA-CLASSIC-SOLVER
+    # /CONDA-PYCOSAT-SOLVER
 
     runs-on: ubuntu-latest
     defaults:
@@ -767,8 +767,8 @@ jobs:
           python=${{ matrix.python-version }}
           conda-forge::pytest-memray
 
-      - name: Install conda-classic-solver  # TEMP
-        run: pip install https://github.com/conda/conda-classic-solver/archive/main.tar.gz --no-deps
+      - name: Install conda-pycosat-solver  # TEMP
+        run: pip install https://github.com/conda/conda-pycosat-solver/archive/main.tar.gz --no-deps
 
       - name: Conda Info
         # view test env info (not base)
@@ -805,7 +805,7 @@ jobs:
           - macos-latest  # osx-arm64
         python-version: ['3.10', '3.14']
         default-channel: [defaults, conda-forge]
-        test-type: [conda-classic-solver, unit, integration]  # CONDA-CLASSIC-SOLVER
+        test-type: [conda-pycosat-solver, unit, integration]  # CONDA-PYCOSAT-SOLVER
         test-group: [1, 2, 3]
         exclude:
           - runs-on: macos-15-intel
@@ -822,17 +822,17 @@ jobs:
             test-type: unit
           - test-type: unit
             test-group: 3
-          - test-type: conda-classic-solver  # CONDA-CLASSIC-SOLVER
-            test-group: 2  # CONDA-CLASSIC-SOLVER
-          - test-type: conda-classic-solver  # CONDA-CLASSIC-SOLVER
-            test-group: 3  # CONDA-CLASSIC-SOLVER
+          - test-type: conda-pycosat-solver  # CONDA-PYCOSAT-SOLVER
+            test-group: 2  # CONDA-PYCOSAT-SOLVER
+          - test-type: conda-pycosat-solver  # CONDA-PYCOSAT-SOLVER
+            test-group: 3  # CONDA-PYCOSAT-SOLVER
     env:
       PYTEST_MARKER: ${{ matrix.test-type == 'unit' && 'not integration and not benchmark' || 'integration and not benchmark' }}
       PYTEST_SPLITS: ${{ matrix.test-type == 'unit' && '2' || '3' }}
-      CONDA_TEST_SOLVERS: classic  # CONDA-CLASSIC-SOLVER
+      CONDA_TEST_SOLVERS: classic  # CONDA-PYCOSAT-SOLVER
 
     steps:
-      # CONDA-CLASSIC-SOLVER
+      # CONDA-PYCOSAT-SOLVER
       - name: Checkout conda
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -841,12 +841,12 @@ jobs:
           ref: remove-classic-rebase
           path: conda
 
-      - name: Checkout conda-classic-solver
+      - name: Checkout conda-pycosat-solver
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-          path: conda-classic-solver
-      # /CONDA-CLASSIC-SOLVER
+          path: conda-pycosat-solver
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Hash + Timestamp
         run: |
@@ -865,7 +865,7 @@ jobs:
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@8ee1f361103df19b6f8c8655fd3967a8ecb162d5 # v4.0.1
         with:
-          condarc-file: conda/.github/condarc-${{ matrix.default-channel }}  # CONDA-CLASSIC-SOLVER
+          condarc-file: conda/.github/condarc-${{ matrix.default-channel }}  # CONDA-PYCOSAT-SOLVER
           run-post: false  # skip post cleanup
           miniconda-version: ${{ matrix.default-channel == 'defaults' && 'latest' || null }}
           miniforge-version: ${{ matrix.default-channel == 'conda-forge' && 'latest' || null }}
@@ -881,21 +881,21 @@ jobs:
         run: conda install --yes "conda-pypi>=0.10.1" -c conda-forge --override-channels
 
       - name: Conda Install
-        working-directory: conda  # CONDA-CLASSIC-SOLVER
+        working-directory: conda  # CONDA-PYCOSAT-SOLVER
         run: >
           conda install
           --yes
           --file tests/requirements.txt
           --file tests/requirements-ci.txt
           --file tests/requirements-s3.txt
-          --file ../conda-classic-solver/tests/requirements.txt
-          --file ../conda-classic-solver/tests/requirements-ci.txt
+          --file ../conda-pycosat-solver/tests/requirements.txt
+          --file ../conda-pycosat-solver/tests/requirements-ci.txt
           python=${{ matrix.python-version }}
 
-      # CONDA-CLASSIC-SOLVER
-      - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
-      # /CONDA-CLASSIC-SOLVER
+      # CONDA-PYCOSAT-SOLVER
+      - name: Install conda-pycosat-solver
+        run: python -m pip install -e conda-pycosat-solver/ -vv --no-deps
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Conda Info
         # view test env info (not base)
@@ -913,8 +913,8 @@ jobs:
         run: brew update && brew install fish xonsh
 
       - name: Run conda Tests
-        if: matrix.test-type != 'conda-classic-solver'  # CONDA-CLASSIC-SOLVER
-        working-directory: conda  # CONDA-CLASSIC-SOLVER
+        if: matrix.test-type != 'conda-pycosat-solver'  # CONDA-PYCOSAT-SOLVER
+        working-directory: conda  # CONDA-PYCOSAT-SOLVER
         run: >
           python -m pytest
           --cov=conda
@@ -924,18 +924,18 @@ jobs:
           -m "${{ env.PYTEST_MARKER }}"
           ${{ env.PYTEST_EXTRA }}
 
-      - name: Run conda-classic-solver Tests
-        if: matrix.test-type == 'conda-classic-solver'
-        working-directory: conda-classic-solver
+      - name: Run conda-pycosat-solver Tests
+        if: matrix.test-type == 'conda-pycosat-solver'
+        working-directory: conda-pycosat-solver
         env:
-          # CONDA-CLASSIC-SOLVER: plugin targets conda remove-classic-rebase (Index/ReducedIndex/get_spinner);
+          # CONDA-PYCOSAT-SOLVER: plugin targets conda remove-classic-rebase (Index/ReducedIndex/get_spinner);
           # make the conda checkout importable now that `pip install -e conda/` is gone
           PYTHONPATH: ${{ github.workspace }}/conda
         run: python -m pytest -vv -m "not slow" --durations=16
-      # /CONDA-CLASSIC-SOLVER
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Upload Coverage
-        if: false  # CONDA-CLASSIC-SOLVER
+        if: false  # CONDA-PYCOSAT-SOLVER
         uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4 # v7.1.0
         with:
           flags: ${{ runner.os }},${{ runner.arch }},${{ matrix.python-version }},${{ matrix.test-type }}
@@ -1053,8 +1053,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-          repository: conda/conda  # CONDA-CLASSIC-SOLVER
-          ref: remove-classic-rebase  # CONDA-CLASSIC-SOLVER
+          repository: conda/conda  # CONDA-PYCOSAT-SOLVER
+          ref: remove-classic-rebase  # CONDA-PYCOSAT-SOLVER
           path: conda
 
       - name: Checkout conda/conda-build
@@ -1064,13 +1064,13 @@ jobs:
           repository: conda/conda-build
           path: conda-build
 
-      # CONDA-CLASSIC-SOLVER
-      - name: Checkout conda-classic-solver
+      # CONDA-PYCOSAT-SOLVER
+      - name: Checkout conda-pycosat-solver
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-          path: conda-classic-solver
-      # /CONDA-CLASSIC-SOLVER
+          path: conda-pycosat-solver
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Hash + Timestamp + Job
         run: |
@@ -1122,10 +1122,10 @@ jobs:
         run: |
           python -m pip install -e conda -e conda-build -v --no-deps
 
-      # CONDA-CLASSIC-SOLVER
-      - name: Install conda-classic-solver
-        run: python -m pip install -e conda-classic-solver/ -vv --no-deps
-      # /CONDA-CLASSIC-SOLVER
+      # CONDA-PYCOSAT-SOLVER
+      - name: Install conda-pycosat-solver
+        run: python -m pip install -e conda-pycosat-solver/ -vv --no-deps
+      # /CONDA-PYCOSAT-SOLVER
 
       - name: Conda Info
         run: python -m conda info --verbose

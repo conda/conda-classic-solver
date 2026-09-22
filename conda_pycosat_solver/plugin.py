@@ -13,7 +13,7 @@ from conda.plugins import hookimpl
 from conda.plugins.types import CondaSolver
 from packaging.version import Version
 
-from .solve import ClassicSolver
+from .solve import PycosatSolver
 
 # conda ships a built-in ``classic`` solver through 26.7.2; the remove-classic
 # work no longer loads it.
@@ -33,11 +33,11 @@ def conda_solvers() -> Iterable[CondaSolver]:
     """
     yield CondaSolver(
         name="pycosat",
-        backend=ClassicSolver,
+        backend=PycosatSolver,
     )
     # Only register the "classic" alias when conda does not already provide it.
     if not _conda_has_classic():
         yield CondaSolver(
             name="classic",
-            backend=ClassicSolver,
+            backend=PycosatSolver,
         )

@@ -1,3 +1,3 @@
 User-agent: *
 
-Sitemap: https://conda.github.io/conda-classic-solver/sitemap.xml
+Sitemap: https://conda.github.io/conda-pycosat-solver/sitemap.xml

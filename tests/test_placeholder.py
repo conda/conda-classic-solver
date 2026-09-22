@@ -4,4 +4,4 @@
 
 
 def test_import():
-    from conda_classic_solver import ClassicSolver  # noqa
+    from conda_pycosat_solver import PycosatSolver  # noqa
