@@ -7,13 +7,13 @@ from typing import TYPE_CHECKING
 
 from conda.testing.solver_helpers import SolverTests
 
-from conda_classic_solver.solve import ClassicSolver
+from conda_pycosat_solver.solve import PycosatSolver
 
 if TYPE_CHECKING:
     from conda.core.solve import Solver
 
 
-class TestClassicSolver(SolverTests):
+class TestPycosatSolver(SolverTests):
     @property
     def solver_class(self) -> type[Solver]:
-        return ClassicSolver
+        return PycosatSolver

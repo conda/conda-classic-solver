@@ -18,5 +18,5 @@
      let us know!
 
      Helpful links:
-       - Conda Org COC: https://github.com/conda/conda-classic-solver/blob/main/CODE_OF_CONDUCT.md
-       - Contributing docs: https://github.com/conda/conda-classic-solver/blob/main/CONTRIBUTING.md -->
+       - Conda Org COC: https://github.com/conda/conda-pycosat-solver/blob/main/CODE_OF_CONDUCT.md
+       - Contributing docs: https://github.com/conda/conda-pycosat-solver/blob/main/CONTRIBUTING.md -->

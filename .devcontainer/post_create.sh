@@ -3,15 +3,15 @@
 # This script assumes we are running in a Miniconda container where:
 # - /opt/conda is the Miniconda or Miniforge installation directory
 # - https://github.com/conda/conda is mounted at /workspaces/conda
-# - https://github.com/conda/conda-classic-solver is mounted at
-#   /workspaces/conda-classic-solver
+# - https://github.com/conda/conda-pycosat-solver is mounted at
+#   /workspaces/conda-pycosat-solver
 
 set -euo pipefail
 
 HERE=$(dirname $0)
 BASE_CONDA=${BASE_CONDA:-/opt/conda}
 SRC_CONDA=${SRC_CONDA:-/workspaces/conda}
-SRC_CONDA_CLASSIC_SOLVER=${SRC_CONDA_CLASSIC_SOLVER:-/workspaces/conda-classic-solver}
+SRC_CONDA_PYCOSAT_SOLVER=${SRC_CONDA_PYCOSAT_SOLVER:-/workspaces/conda-pycosat-solver}
 
 if which apt-get > /dev/null; then
     echo "Installing system dependencies"
@@ -35,6 +35,6 @@ echo "Installing dev & test dependencies..."
     --file="$SRC_CONDA/tests/requirements-ci.txt" \
     --file="$SRC_CONDA/tests/requirements-Linux.txt" \
     --file="$SRC_CONDA/tests/requirements-s3.txt" \
-    --file="$SRC_CONDA_CLASSIC_SOLVER/tests/requirements.txt" \
-    --file="$SRC_CONDA_CLASSIC_SOLVER/tests/requirements-ci.txt" \
+    --file="$SRC_CONDA_PYCOSAT_SOLVER/tests/requirements.txt" \
+    --file="$SRC_CONDA_PYCOSAT_SOLVER/tests/requirements-ci.txt" \
     pre-commit

@@ -1,4 +1,4 @@
-All of the people who have made at least one contribution to conda-classic-solver.
+All of the people who have made at least one contribution to conda-pycosat-solver.
 Authors are sorted alphabetically.
 
 * Aaron Meurer

@@ -6,7 +6,7 @@ from itertools import chain, combinations, permutations, product
 import pytest
 from conda.testing.helpers import raises
 
-from conda_classic_solver.logic import (
+from conda_pycosat_solver.logic import (
     FALSE,
     TRUE,
     Clauses,

@@ -1,8 +1,9 @@
-# conda-classic-solver
+# conda-pycosat-solver
 
-Welcome to the conda-classic-solver documentation! The `classic` solver
-has been powering `conda`'s resolution process since its inception. It's now
-packaged separately to benefit from the configurability of the plugin system.
+Welcome to the conda-pycosat-solver documentation! The `pycosat`-based SAT solver,
+historically known as `classic` (still available as an alias), has been powering
+`conda`'s resolution process since its inception. It's now packaged separately to
+benefit from the configurability of the plugin system.
 
 ## Learn
 
@@ -11,7 +12,7 @@ packaged separately to benefit from the configurability of the plugin system.
 :::{grid-item-card} Getting started
 :link: user-guide/index
 :link-type: doc
-New to conda-classic-solver? Start here to learn the essentials
+New to conda-pycosat-solver? Start here to learn the essentials
 :::
 
 :::{grid-item-card} Configuration
@@ -39,7 +40,7 @@ Recent changes and udpates to the project
 
 
 ```{seealso}
-Found a bug? [File an issue here](https://github.com/conda/conda-classic-solver/issues/new/choose)
+Found a bug? [File an issue here](https://github.com/conda/conda-pycosat-solver/issues/new/choose)
 ```
 
 ```{toctree}

@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from conda_classic_solver import plugin
-from conda_classic_solver.plugin import conda_solvers
+from conda_pycosat_solver import plugin
+from conda_pycosat_solver.plugin import conda_solvers
 
 if TYPE_CHECKING:
     from pytest import Monkeypatch

@@ -15,9 +15,9 @@
         "source=${localWorkspaceFolder}/../conda,target=/workspaces/conda,type=bind,consistency=cached",
     ],
     // Use 'postCreateCommand' to run commands after the container is created.
-    "postCreateCommand": "bash /workspaces/conda-classic-solver/.devcontainer/post_create.sh",
+    "postCreateCommand": "bash /workspaces/conda-pycosat-solver/.devcontainer/post_create.sh",
     // Use 'postStartCommand' to run commands after the container is started.
-    "postStartCommand": "bash /workspaces/conda-classic-solver/.devcontainer/post_start.sh",
+    "postStartCommand": "bash /workspaces/conda-pycosat-solver/.devcontainer/post_start.sh",
 
     // Configure tool-specific properties.
     "customizations": {

@@ -15,14 +15,14 @@ from conda.models.match_spec import MatchSpec
 from conda.models.records import PackageRecord
 from conda.testing.solver_helpers import SimpleEnvironment
 
-from conda_classic_solver.solve import ClassicSolver
+from conda_pycosat_solver.solve import PycosatSolver
 
 
 @pytest.fixture
 def solver_env(tmp_path, tmp_pkgs_dir, reset_conda_context, monkeypatch):
     monkeypatch.setenv("CONDA_SOLVER", "pycosat")
     reset_context(search_path=())
-    return SimpleEnvironment(tmp_path, ClassicSolver, subdirs=("noarch",))
+    return SimpleEnvironment(tmp_path, PycosatSolver, subdirs=("noarch",))
 
 
 @pytest.mark.skipif(
@@ -34,7 +34,7 @@ def test_exclude_newer_selects_older_package(
     solver_env, tmp_path, policy, http_test_server
 ):
     solver_env = SimpleEnvironment(
-        http_test_server.directory, ClassicSolver, subdirs=("noarch",)
+        http_test_server.directory, PycosatSolver, subdirs=("noarch",)
     )
     solver_env.repo_packages = [
         PackageRecord(
@@ -67,7 +67,7 @@ def test_exclude_newer_selects_older_package(
     condarc.write_text(json.dumps(settings[policy]))
     reset_context(search_path=(str(condarc),))
 
-    solver = ClassicSolver(
+    solver = PycosatSolver(
         prefix=tmp_path / "prefix",
         channels=(channel,),
         subdirs=("noarch",),
@@ -141,13 +141,13 @@ def test_solve_with_provided_index(
 
 
 def test_prepare_reduces_provided_index_for_each_spec_set(tmp_path, mocker):
-    solver = ClassicSolver(prefix=tmp_path, channels=())
+    solver = PycosatSolver(prefix=tmp_path, channels=())
     provided_index = Index(prepend=False)
     reduced_indexes = [mocker.Mock(spec=ReducedIndex), mocker.Mock(spec=ReducedIndex)]
     reduce_index = mocker.patch.object(
         Index, "get_reduced_index", autospec=True, side_effect=reduced_indexes
     )
-    mocker.patch("conda_classic_solver.solve.Resolve")
+    mocker.patch("conda_pycosat_solver.solve.Resolve")
     mocker.patch.object(Index, "_realize", side_effect=AssertionError("Eager index"))
     solver._index = provided_index
 

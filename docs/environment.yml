@@ -1,4 +1,4 @@
-name: conda-classic-solver-docs
+name: conda-pycosat-solver-docs
 channels:
   - conda-forge
 dependencies:

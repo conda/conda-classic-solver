@@ -17,14 +17,14 @@
 [labels-global]: https://github.com/conda/infrastructure/blob/main/.github/global.yml
 
 <!-- relative URLs -->
-[workflow-cla]: https://github.com/conda/conda-classic-solver/blob/main/.github/workflows/cla.yml
-[workflow-issues]: https://github.com/conda/conda-classic-solver/blob/main/.github/workflows/issues.yml
-[workflow-labels]: https://github.com/conda/conda-classic-solver/blob/main/.github/workflows/labels.yml
-[workflow-lock]: https://github.com/conda/conda-classic-solver/blob/main/.github/workflows/lock.yml
-[workflow-project]: https://github.com/conda/conda-classic-solver/blob/main/.github/workflows/project.yml
-[workflow-stale]: https://github.com/conda/conda-classic-solver/blob/main/.github/workflows/stale.yml
-[labels-local]: https://github.com/conda/conda-classic-solver/blob/main/.github/labels.yml
-[labels-page]: https://github.com/conda/conda-classic-solver/labels
+[workflow-cla]: https://github.com/conda/conda-pycosat-solver/blob/main/.github/workflows/cla.yml
+[workflow-issues]: https://github.com/conda/conda-pycosat-solver/blob/main/.github/workflows/issues.yml
+[workflow-labels]: https://github.com/conda/conda-pycosat-solver/blob/main/.github/workflows/labels.yml
+[workflow-lock]: https://github.com/conda/conda-pycosat-solver/blob/main/.github/workflows/lock.yml
+[workflow-project]: https://github.com/conda/conda-pycosat-solver/blob/main/.github/workflows/project.yml
+[workflow-stale]: https://github.com/conda/conda-pycosat-solver/blob/main/.github/workflows/stale.yml
+[labels-local]: https://github.com/conda/conda-pycosat-solver/blob/main/.github/labels.yml
+[labels-page]: https://github.com/conda/conda-pycosat-solver/labels
 
 This document seeks to outline how we as a community use GitHub Issues to track bugs and feature requests while still catering to development practices & project management (_e.g._, release cycles, feature planning, priority sorting, etc.).
 
@@ -125,12 +125,12 @@ Issues are "backlogged" when they have been accepted and refined but are not yet
 Global automation procedures synced out from the [`conda/infrastructure`][infrastructure] repo include:
 
 - [Marking/Closing stale issues and pull requests][workflow-stale]:
-  - https://github.com/conda/conda-classic-solver/labels/type%3A%3Asupport issues are labeled as stale after 21 days of inactivity and are closed after 7 more days of inactivity (that is, closed after 30 inactive days total)
-  - non https://github.com/conda/conda-classic-solver/labels/type%3A%3Asupport issues are labeled as stale after 365 days of inactivity and are closed after 30 more days of inactivity (that is, closed after an approximate total of 1 year and 1 month of inactivity)
+  - https://github.com/conda/conda-pycosat-solver/labels/type%3A%3Asupport issues are labeled as stale after 21 days of inactivity and are closed after 7 more days of inactivity (that is, closed after 30 inactive days total)
+  - non https://github.com/conda/conda-pycosat-solver/labels/type%3A%3Asupport issues are labeled as stale after 365 days of inactivity and are closed after 30 more days of inactivity (that is, closed after an approximate total of 1 year and 1 month of inactivity)
   - all pull requests are labeled as stale after 365 days of inactivity and are closed after 30 more days of inactivity (that is, closed after an approximate total of 1 year and 1 month of inactivity)
 - [Locking of closed issues and pull requests with no further activity][workflow-lock] after 365 days
 - [Adding new pull requests to the Review board][workflow-project]
-- [Indicating an issue is ready for a maintainer's attention][workflow-issues] by toggling https://github.com/conda/conda-classic-solver/labels/pending%3A%3Afeedback with https://github.com/conda/conda-classic-solver/labels/pending%3A%3Asupport after a contributor leaves a comment
+- [Indicating an issue is ready for a maintainer's attention][workflow-issues] by toggling https://github.com/conda/conda-pycosat-solver/labels/pending%3A%3Afeedback with https://github.com/conda/conda-pycosat-solver/labels/pending%3A%3Asupport after a contributor leaves a comment
 - [Verifying that contributors have signed the CLA][workflow-cla] before allowing pull requests to be merged; if the contributor hasn't signed the CLA previously, merging is blocked until a manual review can be done
 - [Syncing out templates, labels, workflows, and documentation][workflow-sync] from [`conda/infrastructure`][infrastructure] to the other repositories
 
@@ -152,7 +152,7 @@ This is a duplicate of <b>[link to primary issue]</b>; please feel free to conti
 <!-- nested admonitions do not render -->
 <!-- see https://github.com/orgs/community/discussions/16925#discussioncomment-9542248 -->
 > **Warning**
-> Apply the https://github.com/conda/conda-classic-solver/labels/duplicate label to the issue being closed and https://github.com/conda/conda-classic-solver/labels/duplicate%3A%3Aprimary to the original issue.
+> Apply the https://github.com/conda/conda-pycosat-solver/labels/duplicate label to the issue being closed and https://github.com/conda/conda-pycosat-solver/labels/duplicate%3A%3Aprimary to the original issue.
 
 </details>
 
@@ -172,7 +172,7 @@ support:
 <!-- nested admonitions do not render -->
 <!-- see https://github.com/orgs/community/discussions/16925#discussioncomment-9542248 -->
 > **Warning**
-> Apply the https://github.com/conda/conda-classic-solver/labels/off-topic  label to these issues before closing them out.
+> Apply the https://github.com/conda/conda-pycosat-solver/labels/off-topic  label to these issues before closing them out.
 
 </details>
 
@@ -191,7 +191,7 @@ Community support can be found elsewhere, though, and we encourage you to explor
 <!-- nested admonitions do not render -->
 <!-- see https://github.com/orgs/community/discussions/16925#discussioncomment-9542248 -->
 > **Warning**
-> Apply the https://github.com/conda/conda-classic-solver/labels/off-topic label to these issues before closing them out.
+> Apply the https://github.com/conda/conda-pycosat-solver/labels/off-topic label to these issues before closing them out.
 
 </details>
 
@@ -207,9 +207,9 @@ Labeling is a very important means for core maintainers to keep track of the cur
 
 Each label has an associated description that clarifies how the label should be used. Hover on the label to see its description. Label colors are used to distinguish labels by category.
 
-Generally speaking, labels with the same category are considered mutually exclusive, but in some cases labels sharing the same category can occur concurrently, as they indicate qualifiers as opposed to types. For example, we may have the following types, https://github.com/conda/conda-classic-solver/labels/type%3A%3Abug, https://github.com/conda/conda-classic-solver/labels/type%3A%3Afeature, and https://github.com/conda/conda-classic-solver/labels/type%3A%3Adocumentation, where for any one issue there would be _at most_ **one** of these to be defined (_i.e._ an issue should not be a bug _and_ a feature request at the same time). Alternatively, with issues involving specific operating systems (_i.e._, https://github.com/conda/conda-classic-solver/labels/os%3A%3Alinux, https://github.com/conda/conda-classic-solver/labels/os%3A%3Amacos, and https://github.com/conda/conda-classic-solver/labels/os%3A%3Awindows), an issue could be labeled with one or more, depending on the system(s) the issue occurs on.
+Generally speaking, labels with the same category are considered mutually exclusive, but in some cases labels sharing the same category can occur concurrently, as they indicate qualifiers as opposed to types. For example, we may have the following types, https://github.com/conda/conda-pycosat-solver/labels/type%3A%3Abug, https://github.com/conda/conda-pycosat-solver/labels/type%3A%3Afeature, and https://github.com/conda/conda-pycosat-solver/labels/type%3A%3Adocumentation, where for any one issue there would be _at most_ **one** of these to be defined (_i.e._ an issue should not be a bug _and_ a feature request at the same time). Alternatively, with issues involving specific operating systems (_i.e._, https://github.com/conda/conda-pycosat-solver/labels/os%3A%3Alinux, https://github.com/conda/conda-pycosat-solver/labels/os%3A%3Amacos, and https://github.com/conda/conda-pycosat-solver/labels/os%3A%3Awindows), an issue could be labeled with one or more, depending on the system(s) the issue occurs on.
 
-Please note that there are also automation policies in place that are affected by labeling. For example, if an issue is labeled as https://github.com/conda/conda-classic-solver/labels/type%3A%3Asupport, that issue will be marked https://github.com/conda/conda-classic-solver/labels/stale after 21 days of inactivity and auto-closed after seven more days without activity (30 inactive days total), which is earlier than issues without this label. See [What automation procedures are currently in place?](#what-automation-procedures-are-currently-in-place) for more details.
+Please note that there are also automation policies in place that are affected by labeling. For example, if an issue is labeled as https://github.com/conda/conda-pycosat-solver/labels/type%3A%3Asupport, that issue will be marked https://github.com/conda/conda-pycosat-solver/labels/stale after 21 days of inactivity and auto-closed after seven more days without activity (30 inactive days total), which is earlier than issues without this label. See [What automation procedures are currently in place?](#what-automation-procedures-are-currently-in-place) for more details.
 
 ### What labels are required for each issue?
 
@@ -219,7 +219,7 @@ The `type` labels are exclusive of each other: each sorted issue should have exa
 
 The `source` labels are exclusive of each other: each sorted issue should have exactly one `source` label. These labels give information on the sub-group to which the issue's author belongs (_e.g._, a partner, a frequent contributor, the wider community, etc.). Through these labels, maintainers gain insight into how well we're meeting the needs of various groups.
 
-The `severity` labels are exclusive of each other and, while required for the https://github.com/conda/conda-classic-solver/labels/type%3A%3Abug label, they can also be applied to other types to indicate demand or need. These labels help us to prioritize our work. Severity is not the only factor for work prioritization, but it is an important consideration.
+The `severity` labels are exclusive of each other and, while required for the https://github.com/conda/conda-pycosat-solver/labels/type%3A%3Abug label, they can also be applied to other types to indicate demand or need. These labels help us to prioritize our work. Severity is not the only factor for work prioritization, but it is an important consideration.
 
 Please review the descriptions of the `type`, `source`, and `severity` labels on the [labels page][labels-page] prior to use.
 

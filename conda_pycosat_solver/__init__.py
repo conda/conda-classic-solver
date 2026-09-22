@@ -2,7 +2,7 @@
 # Copyright (C) 2023 conda
 # SPDX-License-Identifier: BSD-3-Clause
 """
-The conda_classic_solver package
+The conda_pycosat_solver package
 """
 
-from .solve import ClassicSolver  # noqa
+from .solve import PycosatSolver  # noqa
