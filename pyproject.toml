@@ -20,8 +20,12 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
+  "boltons >=23.0.0",
   "conda",
+  "frozendict >=2.4.2",
+  "packaging >=26.3",
   "pycosat >=0.6.3",
+  "tqdm >=4",
 ]
 
 [project.entry-points.conda]

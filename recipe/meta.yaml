@@ -21,9 +21,13 @@ requirements:
     - setuptools >=71.0
     - setuptools_scm
   run:
-    - python >=3.8
+    - boltons >=23.0.0
     - conda >=23.7.3
+    - frozendict >=2.4.2
+    - packaging >=26.3
     - pycosat >=0.6.3
+    - python >=3.8
+    - tqdm >=4
 
 test:
   imports:
