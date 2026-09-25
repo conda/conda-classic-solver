@@ -18,8 +18,8 @@ requirements:
   host:
     - python >=3.8
     - pip
-    - setuptools >=71.0
-    - setuptools_scm
+    - hatchling
+    - hatch-vcs
   run:
     - boltons >=23.0.0
     - conda >=23.7.3
