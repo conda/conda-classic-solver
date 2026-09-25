@@ -1,6 +1,9 @@
 [build-system]
-requires = ["setuptools>=71.0", "setuptools-scm"]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
+requires = [
+  "hatchling >=1.12.2",
+  "hatch-vcs >=0.2.0",
+]
 
 [project]
 name = "conda-pycosat-solver"
@@ -31,8 +34,14 @@ dependencies = [
 [project.entry-points.conda]
 conda-pycosat-solver = "conda_pycosat_solver.plugin"
 
-[tool.setuptools]
-packages = ["conda_pycosat_solver"]
+[tool.hatch.build.hooks.vcs]
+version-file = "conda_pycosat_solver/_version.py"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+local_scheme = "dirty-tag"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
